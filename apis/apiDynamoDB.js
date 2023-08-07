@@ -3,6 +3,7 @@ const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 const { fromEnv } = require('@aws-sdk/credential-provider-env');
 const dotenv = require('dotenv');
 const { PutCommand, DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+const { fromIni } = require('@aws-sdk/credential-provider-ini');
 
 // Carga las variables de entorno desde el archivo .env
 dotenv.config();
