@@ -96,7 +96,6 @@ function createUser (id, user) {
                     email: user.email,
                     subscription: false,
                     IAtrained: false,
-
                 }
             })
             docClient.send(command).then(response => {
