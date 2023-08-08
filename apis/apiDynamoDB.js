@@ -116,7 +116,7 @@ function getUser (id) {
                 }
             })
             docClient.send(command).then(result => {
-                console.log(result)
+                console.log(result.Item)
                 res(result)
             }).catch(error => {
                 console.log(error)
