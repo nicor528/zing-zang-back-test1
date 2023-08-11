@@ -16,7 +16,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
+console.log("no")
 
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => console.log("server up en", PORT));
