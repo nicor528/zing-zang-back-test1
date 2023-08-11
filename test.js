@@ -72,8 +72,8 @@ function test7 () {
 }
 
 function test8 () {
-    fetch("http://3.129.111.250:4242/singUpEmail", {
-        method: "POST",
+    fetch("http://3.129.111.250:4242/test", {
+        method: "GET",
           headers: {
               "Content-Type" : "application/json"
               },

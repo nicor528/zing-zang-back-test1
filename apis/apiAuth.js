@@ -10,6 +10,8 @@ const {getAuth,
     createUserWithEmailAndPassword
 } = require("firebase/auth"); 
 
+const {initializeApp} = require("firebase/app")
+
 
 const firebaseConfig = {
     apiKey: process.env.apiKey,
