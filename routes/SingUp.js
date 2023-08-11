@@ -1,6 +1,7 @@
 const express = require('express');
-const { createUser } = require('../apis/apiDynamoDB');
+const { createUser, createID } = require('../apis/apiDynamoDB');
 const router = express.Router();
+const { SingInPass, SingUpEmail1 } = require('../apis/apiAuth');
 
 router.get("/test", (req,res) => {
     res.status(200).send("holaaaa")
@@ -13,12 +14,24 @@ router.post("/singUpGoogle", async (req, res) => {
 
 router.post("/singUpEmail", async (req, res) => {
     const user = req.body.user;
-    const uid = req.body.uid
-    createUser(uid, user).then(user => {
-        
-    }).catch(error => {
-        console.log(error)
+    const uid = req.body.uid;
+    const email = req.body.email;
+    const pass = req.body.pass;
+    SingUpEmail1(email, pass).then(user => {
+        createID(user.uid).then(id => {
+            createUser(id, user).then(user => {
+                res.status(200).send({
+                    data : {
+                        xu1 : uid,
+                        k3y: id
+                    }
+                })
+            }).catch(error => {
+                console.log(error)
+            })
+        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
     })
+    
 })
 
 router.post("/singUpFace")

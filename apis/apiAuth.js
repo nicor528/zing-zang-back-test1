@@ -1,4 +1,4 @@
-const {auth} = require("./apiFirebase");
+require('dotenv').config();
 const {getAuth, 
     signInWithRedirect,
     GoogleAuthProvider, 
@@ -9,6 +9,20 @@ const {getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword
 } = require("firebase/auth"); 
+
+
+const firebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId,
+    appId: process.env.appId,
+}
+
+const app = initializeApp(firebaseConfig);
+
+const auth =  getAuth(app);
 
 function SingUpGoogle (token) {
     return(
@@ -21,7 +35,24 @@ function SingUpGoogle (token) {
     )
 }
 
-function SingUpEmail (email, pass) {
+function SingInPass (email, password) {
+    return(
+      new Promise((res, rej) => {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential)=>{
+            const user = userCredential.user
+            console.log(user)
+            const data = {id: user.uid}
+            res(user)
+          }).catch(error => {
+            console.log(error);
+            rej(error)
+          })
+      })
+    )
+}
+
+function SingUpEmail1 (email, pass) {
     return(
         new Promise (async (res, rej) => {
             createUserWithEmailAndPassword(auth, email, pass).then(userCredential => {
@@ -39,6 +70,7 @@ function SingUpEmail (email, pass) {
 
 module.exports = {
     SingUpGoogle,
-    SingUpEmail,
+    SingUpEmail1,
+    SingInPass,
 
 }

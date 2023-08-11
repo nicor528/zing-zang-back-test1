@@ -36,7 +36,7 @@ const dynamoDB = new DynamoDB({ client: dynamoDBClient });
 function generateAlphanumericCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let code = '';
-  
+
     for (let i = 0; i < 16; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       code += characters.charAt(randomIndex);
@@ -116,10 +116,10 @@ function getUser (id) {
                 }
             })
             docClient.send(command).then(result => {
-                console.log(result.Item)
-                res(result)
+                res(result.Item)
             }).catch(error => {
                 console.log(error)
+                rej(error)
             })
         })
     )
