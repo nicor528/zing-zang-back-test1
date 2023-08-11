@@ -25,7 +25,7 @@ router.post("/singUpEmail", async (req, res) => {
                 //asd
                 const data = {
                     xu1: uid,
-                    k3t: id
+                    k3t: id,
                 }
                 res.status(200).send(data)
             }).catch(error => {
