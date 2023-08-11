@@ -22,11 +22,10 @@ router.post("/singUpEmail", async (req, res) => {
     SingUpEmail1(email, pass).then(user => {
         createID(user.uid).then(id => {
             createUser(id, User, email, pass).then(user => {
+                //asd
                 res.status(200).send({
-                    data : {
-                        xu1 : uid,
-                        k3y: id
-                    }
+                    xu1 : uid,
+                    k3y: id
                 })
             }).catch(error => {
                 console.log(error)
