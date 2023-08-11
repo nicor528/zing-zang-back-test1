@@ -14,3 +14,5 @@ router.post("/singInEmail", async (req, res) => {
         }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
     }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
 })
+
+module.exports = router;
