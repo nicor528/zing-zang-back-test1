@@ -72,12 +72,12 @@ function test7 () {
 }
 
 function test8 () {
-    fetch("http://3.129.111.250:4242/test", {
-        method: "GET",
+    fetch("http://3.129.111.250:4242/singUpEmail", {
+        method: "POST",
           headers: {
               "Content-Type" : "application/json"
               },
-        //body: JSON.stringify({email: "test3000@gmail.com", pass: "123"}),
+        body: JSON.stringify({email: "test3000@gmail.com", pass: "123", user: {name: "asd"}}),
     }).then(data => {
         console.log("test")
         console.log(data)

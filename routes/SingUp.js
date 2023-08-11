@@ -13,6 +13,7 @@ router.post("/singUpGoogle", async (req, res) => {
 })
 
 router.post("/singUpEmail", async (req, res) => {
+    console.log(req.body)
     const User = req.body.user;
     const uid = req.body.uid;
     const email = req.body.email;
