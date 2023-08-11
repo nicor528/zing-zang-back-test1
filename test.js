@@ -71,6 +71,21 @@ function test7 () {
     }).catch(error => {console.log(error)})
 }
 
+function test8 () {
+    fetch("http://3.129.111.250:4242/singUpEmail", {
+        method: "POST",
+          headers: {
+              "Content-Type" : "application/json"
+              },
+        //body: JSON.stringify({email: "test3000@gmail.com", pass: "123"}),
+    }).then(data => {
+        console.log("test")
+        console.log(data)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
 //createTable();
 
-test7();
+test8();
