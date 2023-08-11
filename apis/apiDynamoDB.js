@@ -85,7 +85,7 @@ function getID (uid) {
     )
 }
 
-function createUser (id, user) {
+function createUser (id, user, email, pass) {
     return(
         new Promise (async (res, rej) => {
             const command = await new PutCommand({
@@ -93,7 +93,8 @@ function createUser (id, user) {
                 Item: {
                     id: id,
                     name: user.name,
-                    email: user.email,
+                    email: email,
+                    pass: pass,
                     subscription: false,
                     IAtrained: false,
                 }

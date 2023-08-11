@@ -13,13 +13,13 @@ router.post("/singUpGoogle", async (req, res) => {
 })
 
 router.post("/singUpEmail", async (req, res) => {
-    const user = req.body.user;
+    const User = req.body.user;
     const uid = req.body.uid;
     const email = req.body.email;
     const pass = req.body.pass;
     SingUpEmail1(email, pass).then(user => {
         createID(user.uid).then(id => {
-            createUser(id, user).then(user => {
+            createUser(id, User, email, pass).then(user => {
                 res.status(200).send({
                     data : {
                         xu1 : uid,
