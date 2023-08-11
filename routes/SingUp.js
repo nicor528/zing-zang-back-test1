@@ -4,6 +4,7 @@ const router = express.Router();
 const { SingInPass, SingUpEmail1 } = require('../apis/apiAuth');
 
 router.get("/test", (req,res) => {
+    console.log("test")
     res.status(200).send("holaaaa")
 })
 
