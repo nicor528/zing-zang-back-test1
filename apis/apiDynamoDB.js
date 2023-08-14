@@ -66,6 +66,31 @@ function createID (uid) {
     )
 }
 
+function verifyKey (id, key) {
+    return(
+        new Promise (async (res, rej) => {
+            const newCode = await generateAlphanumericCode();
+            const command = await new GetCommand({
+                TableName: "keys",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+
+                res(newCode)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function setNewKey(id, newKey) {
+
+}
+
 function getID (uid) {
     return(
         new Promise (async (res, rej) => {
@@ -81,6 +106,21 @@ function getID (uid) {
                 console.log(error)
                 rej(error)
             })
+        })
+    )
+}
+
+function setSubDate (id, date) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new PutCommand({
+                TableName: "subsDate",
+                Item: {
+                    id: id,
+                    date: date
+                }
+            })
+
         })
     )
 }
@@ -126,6 +166,10 @@ function getUser (id) {
     )
 }
 
+function editInfoUser (user) {
+
+}
+
 function createTable () {
     return (
         new Promise (async (res, rej) => {
@@ -165,6 +209,10 @@ module.exports = {
     createTable,
     getUser,
     createID,
-    getID
+    getID,
+    editInfoUser,
+    verifyKey,
+    setNewKey,
+    setSubDate
 
 }

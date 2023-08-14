@@ -1,9 +1,9 @@
-/*const { fromIni } = require("@aws-sdk/credential-provider-ini");
+const { fromIni } = require("@aws-sdk/credential-provider-ini");
 const { S3Client, ListBucketsCommand, ListObjectsCommand, ListObjectsV2Command } = require("@aws-sdk/client-s3");
 
 const s3Client = new S3Client({
     region: "eu-west-2", // Reemplaza con la región que corresponda
-    credentials: fromEnv(),
+    credentials: fromIni({ profile: "bucket-eugenio-zing" }),
 });
 
 async function listarArchivosEnCarpeta(carpeta) {
@@ -41,4 +41,4 @@ function getFiles (id) {
 module.exports = {
     getFiles,
 
-}*/
+}
