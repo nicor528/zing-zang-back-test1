@@ -41,7 +41,6 @@ function generateAlphanumericCode() {
       const randomIndex = Math.floor(Math.random() * characters.length);
       code += characters.charAt(randomIndex);
     }
-
     return code;
 }
 
@@ -77,8 +76,12 @@ function verifyKey (id, key) {
                 }
             })
             docClient.send(command).then(result => {
-
-                res(newCode)
+                const lastKey = result.Item.key
+                if(lastKey == key){
+                    res(newCode)
+                }else{
+                    rej(1)
+                }
             }).catch(error => {
                 console.log(error);
                 rej(error)
@@ -87,8 +90,43 @@ function verifyKey (id, key) {
     )
 }
 
-function setNewKey(id, newKey) {
+function getKey (id) {
+    return(
+        new Promise(async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "keys",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item.key)
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
 
+function setNewKey(id, newKey) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new PutCommand({
+                TableName: "keys",
+                Item: {
+                    id: id,
+                    key: newKey
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
 }
 
 function getID (uid) {
@@ -120,7 +158,6 @@ function setSubDate (id, date) {
                     date: date
                 }
             })
-
         })
     )
 }
@@ -213,6 +250,8 @@ module.exports = {
     editInfoUser,
     verifyKey,
     setNewKey,
-    setSubDate
+    setSubDate,
+    generateAlphanumericCode,
+    getKey
 
 }

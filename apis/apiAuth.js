@@ -1,17 +1,9 @@
-require('dotenv').config();
-const {getAuth, 
-    signInWithRedirect,
-    GoogleAuthProvider, 
-    signInWithPopup, 
-    FacebookAuthProvider, 
-    TwitterAuthProvider,
-    signInWithCredential, 
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
-} = require("firebase/auth"); 
+const dotenv = require('dotenv');
+dotenv.config();
 
-const {initializeApp} = require("firebase/app")
-
+const { getAuth, signInWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require("firebase/auth"); 
+const { initializeApp } = require("firebase/app");
+const { GoogleAuthProvider } = require("firebase/auth"); // Asegúrate de importar cualquier otro proveedor que necesites
 
 const firebaseConfig = {
     apiKey: process.env.apiKey,
@@ -20,11 +12,13 @@ const firebaseConfig = {
     storageBucket: process.env.storageBucket,
     messagingSenderId: process.env.messagingSenderId,
     appId: process.env.appId,
+    measurementId: process.env.measurementId
 }
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 
-const auth =  getAuth(app);
+const auth = getAuth(app);
+
 
 function SingUpGoogle (token) {
     return(

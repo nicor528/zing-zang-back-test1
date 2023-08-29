@@ -1,3 +1,4 @@
+const { SingUpEmail1 } = require("./apis/apiAuth");
 const { createUser, createTable, getUser, createID, getID } = require("./apis/apiDynamoDB");
 const { getFiles } = require("./apis/apiS3");
 
@@ -86,6 +87,61 @@ function test8 () {
     })
 }
 
+function test9 () {
+    const id = "2";
+    
+    verifyKey(id, key).then(newKey => {
+        setNewKey(id, newKey).then(data => {
+            console.log(data)
+        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+    }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+}
+
+function test10() {
+    const data = {
+        user : {
+            name: "nicolas"
+        },
+        email: "test17@gmail.com",
+        pass: "test12"
+    }
+
+    fetch("http://localhost:4242/singUpEmail", {
+        method: "POST",
+          headers: {
+              "Content-Type" : "application/json"
+              },
+        body: JSON.stringify(data),
+    }).then(async (data) => {
+        console.log("test")
+        const x = await data.json()
+        console.log(x)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
 //createTable();
 
-test8();
+function test11 () {
+    const data = {
+        id: "3",
+        key: "1HJpBrUYUcZKtrD9"
+    }
+    fetch("http://localhost:4242/verifyRequest", {
+        method: "POST",
+          headers: {
+              "Content-Type" : "application/json"
+              },
+        body: JSON.stringify(data),
+    }).then(async (data) => {
+        console.log("test")
+        console.log(data)
+        const x = await data.json()
+        console.log(x)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+test11();
