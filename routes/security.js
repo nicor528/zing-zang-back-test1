@@ -20,6 +20,20 @@ router.post("/verifyRequest", async (req, res) => {
     })
 })
 
+router.post("/verifyDemo", async (res, rej) => {
+    const id = req.body.id;
+    const key = req.body.key;
+    verifyKey(id, key).then(newKey => {
+        res.status(200).send({key: key})
+    }).catch(error => {
+        if(error == 1){
+            res.status(401).send({error : "wrong key"})
+        }else{
+            res.status(400).send({error : "bad conection with DB"})
+        }
+    })
+})
+
 
 
 

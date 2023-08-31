@@ -102,7 +102,7 @@ function test10() {
         user : {
             name: "nicolas"
         },
-        email: "test17@gmail.com",
+        email: "test200@gmail.com",
         pass: "test12"
     }
 
@@ -126,9 +126,9 @@ function test10() {
 function test11 () {
     const data = {
         id: "3",
-        key: "1HJpBrUYUcZKtrD9"
+        key: "KKmno3je9IdMDdzO"
     }
-    fetch("http://localhost:4242/verifyRequest", {
+    fetch("http://3.129.111.250:4242/verifyRequest", {
         method: "POST",
           headers: {
               "Content-Type" : "application/json"
@@ -144,4 +144,47 @@ function test11 () {
     })
 }
 
-test11();
+function test12() {
+    const data = {
+        uid : "123456a",
+        email: "test200@gmail.com",
+        user : {
+            name: "nicolas"
+        }
+    }
+
+    fetch("http://3.129.111.250:4242/singUpGoogle", {
+        method: "POST",
+          headers: {
+              "Content-Type" : "application/json"
+              },
+        body: JSON.stringify(data),
+    }).then(async (data) => {
+        console.log("test")
+        const x = await data.json()
+        console.log(x)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+function test13() {
+    const data = {
+        uid : "123456a"
+    }
+    fetch("http://3.129.111.250:4242/singInWithId", {
+        method: "POST",
+          headers: {
+              "Content-Type" : "application/json"
+              },
+        body: JSON.stringify(data),
+    }).then(async (data) => {
+        console.log("test")
+        const x = await data.json()
+        console.log(x)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+test13();
