@@ -8,7 +8,7 @@ router.post("/verifyRequest", async (req, res) => {
     const id = req.body.id;
     const key = req.body.key;
     verifyKey(id, key).then(newKey => {
-        setNewKey(id, newKey).then(async (data) => {
+        setNewKey(id, key).then(async (data) => {
             res.status(200).send({key: newKey})
         }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
     }).catch(error => {
