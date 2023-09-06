@@ -89,10 +89,10 @@ router.post("/singUpGoogle", async (req, res) => {
  * @swagger
  * /api/singup/singUpEmail:
  *   post:
- *     summary: SignUp using email and password
- *     tags: [SignUp]
+ *     summary: SingUp using email and password
+ *     tags: [SingUp]
  *     requestBody:
- *       description: User data for Email SignUp
+ *       description: User data for Email SingUp
  *       required: true
  *       content:
  *         application/json:
@@ -107,7 +107,7 @@ router.post("/singUpGoogle", async (req, res) => {
  *                 type: string
  *     responses:
  *       200:
- *         description: SignUp successful
+ *         description: SingUp successful
  *         content:
  *           application/json:
  *             example:

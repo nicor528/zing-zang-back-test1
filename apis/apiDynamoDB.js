@@ -76,7 +76,7 @@ function setPat (id, pat) {
                 }
             })
             docClient.send(command).then(response => {
-                res(newCode)
+                res()
             }).catch(error => {
                 console.log(error)
                 rej(error)

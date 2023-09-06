@@ -60,7 +60,7 @@ router.post("/singInEmail", async (req, res) => {
  * /api/singin/singInWithId:
  *   post:
  *     summary: Sing In using user ID
- *     tags: [SignIn]
+ *     tags: [SingIn]
  *     requestBody:
  *       description: User data for ID Sign In
  *       required: true

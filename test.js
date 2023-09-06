@@ -233,4 +233,22 @@ function test17 () {
     })
 }
 
-test16();
+function test18(){
+    const data = {
+        email: "test123@gmail.com",
+        id: "4"
+    }
+    fetch("http://3.129.111.250:4242/api/Spotify/createPat", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: JSON.stringify(data),
+    }).then((data) => {
+        console.log(data)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+test18();
