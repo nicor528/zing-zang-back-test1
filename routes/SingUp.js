@@ -72,11 +72,15 @@ router.post("/singUpGoogle", async (req, res) => {
         createUser(id, User, email, "").then(async (user) => {
             const key = await generateAlphanumericCode();
             setNewKey(id, key).then(async (datax) => {
-                const data = await {
-                    id: id,
-                    key: key,
-                }
-                res.status(200).send(data)
+                getRot(email).then(pat => {
+                    setPat(id, pat).then(async () => {
+                        const data = await {
+                            id: id,
+                            key: key,
+                        }
+                        res.status(200).send(data)
+                    }).catch(error => {res.status(400)})
+                }).catch(error => {res.status(400)})
             }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
         }).catch(error => {
             console.log(error)
@@ -131,11 +135,15 @@ router.post("/singUpEmail", async (req, res) => {
             createUser(id, User, email, pass).then(async (user) => {
                 const key = await generateAlphanumericCode();
                 setNewKey(id, key).then(async (datax) => {
-                    const data = await {
-                        id: id,
-                        key: key,
-                    }
-                    res.status(200).send(data)
+                    getRot(email).then(pat => {
+                        setPat(id, pat).then(async () => {
+                            const data = await {
+                                id: id,
+                                key: key,
+                            }
+                            res.status(200).send(data)
+                        }).catch(error => {res.status(400)})
+                    }).catch(error => {res.status(400)})
                 }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
             }).catch(error => {
                 console.log(error)

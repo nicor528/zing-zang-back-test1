@@ -92,9 +92,9 @@ router.post("/createPat", async (req, res) => {
 *               error: Bad request
 */
 router.post("/createTextSong", async (req, res) => {
-    const mode = req.body.mode;
+    const mode = "track";
     const duration = req.body.duration;
-    const bitrate = req.body.bitrate;
+    const bitrate = "128";
     const text = req.body.text;
     const tittle = req.body.tittle;
     const id = req.body.id;
