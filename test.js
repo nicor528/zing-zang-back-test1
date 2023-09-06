@@ -1,9 +1,10 @@
 const { SingUpEmail1 } = require("./apis/apiAuth");
-const { createUser, createTable, getUser, createID, getID } = require("./apis/apiDynamoDB");
+const { createUser, createTable, getUser, createID, getID, getPat, addNewTextSong, addDataToObject, getTextSongs } = require("./apis/apiDynamoDB");
 const { getFiles } = require("./apis/apiS3");
+const { getRot, createSong } = require("./apis/apiSpotify");
 
 function test () {
-    createUser("123", {name: "test", email: "test@test.com"}).then(data => {
+    createUser("123", {name: "test2", email: "test2@test.com"}).then(data => {
         console.log("ok")
     }).catch(error => {console.log("noOk")})
 }
@@ -152,7 +153,6 @@ function test12() {
             name: "nicolas"
         }
     }
-
     fetch("http://3.129.111.250:4242/singUpGoogle", {
         method: "POST",
           headers: {
@@ -170,21 +170,67 @@ function test12() {
 
 function test13() {
     const data = {
-        uid : "123456a"
+        id: "3",
+        key : "9gxmnRjLDCZFBfIm"
     }
-    fetch("http://3.129.111.250:4242/singInWithId", {
-        method: "POST",
-          headers: {
-              "Content-Type" : "application/json"
-              },
-        body: JSON.stringify(data),
-    }).then(async (data) => {
-        console.log("test")
-        const x = await data.json()
-        console.log(x)
-    }).catch(error => {
-        console.log(error)
+    return(
+        new Promise (async (res, rej) => {
+            fetch("http://3.129.111.250:4242/verifyRequest", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                    },
+                body: JSON.stringify(data),
+            }).then(async (data) => {
+                console.log("test")
+                const x = await data.json()
+                console.log(x)
+                if(data.status === 20){
+                    res()
+                }else{
+                    rej()
+                }
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function test14() {
+    getRot("", "").then(data => {
+        console.log("ok")
+    }).catch(() => {console.log("NOOK")})
+}
+
+function test15 () {
+    createSong("emluZ3phbmdsYWIuMjA1MDg0NjQuNmRjNWQwMGE4YTczNzAxNzI4Yzc4Yjc3YjY0MjY0ZDRmOTRmYzlhZS4xLjM.dec513b282648c378b048c01497c5bddccaf238a0c3c094ae1f9e14e0aee6e67",
+    "track", "60", "128", "a love song").then(() => {
+        console.log("OK")
+    }).catch(() => {console.log("NOOK")})
+}
+
+function test16 () {
+    const mode = "track";
+    const duration = "60";
+    const bitrate = "128";
+    const text = "a really love song";
+    const id = "MjrK0Yx7O2UlkLqU";
+    const tittle = "example22";
+    getPat(id).then(pat => {
+        createSong(pat, mode, duration, bitrate, text).then(tasks => {
+            addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, tittle).then(data => {
+                console.log("OOK")
+            }).catch(error => {console.log("NOOK")})
+        }).catch(error => {console.log("NOOK")})
+    }).catch(error => {console.log("NOOK")})
+}
+
+function test17 () {
+    getTextSongs("MjrK0Yx7O2UlkLqU").then(data => {
+        console.log(data)
     })
 }
 
-test13();
+test16();

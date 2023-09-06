@@ -1,13 +1,68 @@
+/**
+ * @swagger
+ * tags:
+ *   name: SingUp
+ *   description: SingUp operations
+ */
 const express = require('express');
 const { createUser, createID, setNewKey, generateAlphanumericCode } = require('../apis/apiDynamoDB');
 const router = express.Router();
 const { SingUpEmail1 } = require('../apis/apiAuth');
 
+/**
+ * @swagger
+ * /api/singup/test:
+ *   get:
+ *     summary: Test the SingUp route
+ *     tags: [SingUp]
+ *     responses:
+ *       200:
+ *         description: Test successful
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Test successful
+ */
 router.get("/test", (req,res) => {
     console.log("test")
     res.status(200).send("holaaaa")
 })
 
+/**
+ * @swagger
+ * /api/singup/singUpGoogle:
+ *   post:
+ *     summary: SingUp using Google
+ *     tags: [SingUp]
+ *     requestBody:
+ *       description: User data for Google SignUp
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               uid:
+ *                 type: string
+ *               user:
+ *                 type: object
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: SignUp successful
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 12345
+ *               key: abc123
+ *       400:
+ *         description: Bad connection with DB
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad connection with DB
+ */
 router.post("/singUpGoogle", async (req, res) => {
     const uid = req.body.uid;
     const User = req.body.user;
@@ -30,6 +85,41 @@ router.post("/singUpGoogle", async (req, res) => {
 
 })
 
+/**
+ * @swagger
+ * /api/singup/singUpEmail:
+ *   post:
+ *     summary: SignUp using email and password
+ *     tags: [SignUp]
+ *     requestBody:
+ *       description: User data for Email SignUp
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user:
+ *                 type: object
+ *               email:
+ *                 type: string
+ *               pass:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: SignUp successful
+ *         content:
+ *           application/json:
+ *             example:
+ *               id: 12345
+ *               key: abc123
+ *       400:
+ *         description: Bad connection with DB
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad connection with DB
+ */
 router.post("/singUpEmail", async (req, res) => {
     console.log(req.body)
     const User = req.body.user;
