@@ -24,6 +24,7 @@ function getRot (email) {
                     },
                 }),
             }).then(async (data) => {
+                console.log(data)
                 const x = await data.json()
                 console.log(x.data.pat);
                 res(x.data.pat)

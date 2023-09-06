@@ -235,14 +235,13 @@ function test17 () {
 
 async function test18(){
     const data = {
-        mode : "track",
-        duration : "60",
-        bitrate : "128",
-        text : "a really love song",
-        id :"4",
-        tittle : "example32",
+        user : {
+            name: "nicolas"
+        },
+        email : "test10112@gmail.com",
+        pass: "test12"
     }
-    fetch("http://3.129.111.250:4242/api/spotify/requestTextSongs", {
+    fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
