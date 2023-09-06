@@ -5,9 +5,10 @@
  *   description: SingUp operations
  */
 const express = require('express');
-const { createUser, createID, setNewKey, generateAlphanumericCode } = require('../apis/apiDynamoDB');
+const { createUser, createID, setNewKey, generateAlphanumericCode, setPat } = require('../apis/apiDynamoDB');
 const router = express.Router();
 const { SingUpEmail1 } = require('../apis/apiAuth');
+const { getRot } = require('../apis/apiSpotify');
 
 /**
  * @swagger
@@ -71,7 +72,7 @@ router.post("/singUpGoogle", async (req, res) => {
     createID(uid).then(id => {
         createUser(id, User, email, "").then(async (user) => {
             const key = await generateAlphanumericCode();
-            setNewKey(id, key).then(async (datax) => {
+            setNewKey(id, key).then( () => {
                 getRot(email).then(pat => {
                     setPat(id, pat).then(async () => {
                         const data = await {
@@ -134,7 +135,7 @@ router.post("/singUpEmail", async (req, res) => {
         createID(user1.uid).then(id => {
             createUser(id, User, email, pass).then(async (user) => {
                 const key = await generateAlphanumericCode();
-                setNewKey(id, key).then(async (datax) => {
+                setNewKey(id, key).then(() => {
                     getRot(email).then(pat => {
                         setPat(id, pat).then(async () => {
                             const data = await {
@@ -142,14 +143,14 @@ router.post("/singUpEmail", async (req, res) => {
                                 key: key,
                             }
                             res.status(200).send(data)
-                        }).catch(error => {res.status(400)})
-                    }).catch(error => {res.status(400)})
-                }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+                        }).catch(error => {res.status(400).send({error})})
+                    }).catch(error => {res.status(400).send({error})})
+                }).catch(error => {res.status(400).send({error})})
             }).catch(error => {
                 console.log(error)
             })
-        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-    })
+        }).catch(error => {res.status(400).send({error})})
+    }).catch(error => {res.status(400).send({error})})
 })
 
 router.post("/singUpFace")

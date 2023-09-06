@@ -238,10 +238,10 @@ async function test18(){
         user : {
             name: "nicolas"
         },
-        email : "test10112@gmail.com",
+        email : "test1116@gmail.com",
         pass: "test12"
     }
-    fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
+    fetch("http://localhost:4242/api/singup/singUpEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"

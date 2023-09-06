@@ -159,6 +159,7 @@ function setNewKey(id, newKey) {
                 }
             })
             docClient.send(command).then(result => {
+                console.log(result)
                 res(result)
             }).catch(error => {
                 console.log(error);
