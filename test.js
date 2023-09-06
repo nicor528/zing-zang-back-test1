@@ -233,17 +233,21 @@ function test17 () {
     })
 }
 
-function test18(){
+async function test18(){
     const data = {
-        email: "test123@gmail.com",
-        id: "4"
+        mode : "track",
+        duration : "60",
+        bitrate : "128",
+        text : "a really love song",
+        id :"4",
+        tittle : "example22",
     }
-    fetch("http://3.129.111.250:4242/api/Spotify/createPat", {
+    fetch("http://3.129.111.250:4242/api/spotify/createTextSong", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
             },
-        body: JSON.stringify(data),
+        body: await JSON.stringify(data),
     }).then((data) => {
         console.log(data)
     }).catch(error => {

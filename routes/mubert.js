@@ -91,9 +91,9 @@ router.post("/createPat", async (req, res) => {
 *             example:
 *               error: Bad request
 */
-router.post("/createTextSong", async (res, req) => {
+router.post("/createTextSong", async (req, res) => {
     const mode = req.body.mode;
-    const duration = req.body.mode;
+    const duration = req.body.duration;
     const bitrate = req.body.bitrate;
     const text = req.body.text;
     const tittle = req.body.tittle;
