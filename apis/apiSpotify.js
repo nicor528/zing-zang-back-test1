@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
+const fetch = require('node-fetch');
 
 
 function getRot (email) {
