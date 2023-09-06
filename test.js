@@ -235,14 +235,14 @@ function test17 () {
 
 async function test18(){
     const data = {
-        mode : "track",
-        duration : "60",
-        bitrate : "128",
-        text : "a really love song",
+        //mode : "track",
+        //duration : "60",
+        //bitrate : "128",
+        //text : "a really love song",
         id :"4",
-        tittle : "example32",
+        //tittle : "example32",
     }
-    fetch("http://3.129.111.250:4242/api/spotify/createTextSong", {
+    fetch("http://3.129.111.250:4242/api/spotify/requestTextSongs", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"

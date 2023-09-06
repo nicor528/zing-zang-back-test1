@@ -141,7 +141,7 @@ router.post("/createTextSong", async (req, res) => {
 *             example:
 *               error: Bad request
 */
-router.post("/requestTextSongs", async (res, rej) => {
+router.post("/requestTextSongs", async (req, res) => {
     const id = req.body.id;
     getTextSongs(id).then(songs => {
         res.status(200).send(songs)
