@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
-const { setPat, getPat, getTextSongs } = require('../apis/apiDynamoDB');
+const { setPat, getPat, getTextSongs, addNewTextSong } = require('../apis/apiDynamoDB');
 const router = express.Router();
 
 /**

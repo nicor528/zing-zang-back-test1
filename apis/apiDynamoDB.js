@@ -303,11 +303,12 @@ function addNewTextSong (id, id2, link, tittle) {
                 }
             })
             docClient.send(command).then(result => {
+                console.log(result.Item.songs)
                 const newUser = {
                     songs :  [...result.Item.songs,
                         {
                             tittle: tittle,
-                            id: id,
+                            id: id2,
                             link: link
                         }
                     ]
