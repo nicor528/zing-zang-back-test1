@@ -96,12 +96,12 @@ router.post("/createTextSong", async (req, res) => {
     const duration = req.body.duration;
     const bitrate = "128";
     const text = req.body.text;
-    const tittle = req.body.tittle;
+    const title = req.body.title;
     const id = req.body.id;
-    if(mode && duration && bitrate && text && tittle && id){
+    if(mode && duration && bitrate && text && title && id){
         getPat(id).then(pat => {
             createSong(pat, mode, duration, bitrate, text).then(tasks => {
-                addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, tittle).then(data => {
+                addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title).then(data => {
                     res.status(200).send({message: "ok"})
                 }).catch(error => {res.status(400).send(error)})
             }).catch(error => {res.status(400).send(error)})

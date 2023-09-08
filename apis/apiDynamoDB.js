@@ -298,7 +298,7 @@ function getTextSongs (id) {
     )
 }
 
-function addNewTextSong (id, id2, link, tittle) {
+function addNewTextSong (id, id2, link, title) {
     return(
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
@@ -312,7 +312,7 @@ function addNewTextSong (id, id2, link, tittle) {
                 const newUser = {
                     songs :  [...result.Item.songs,
                         {
-                            tittle: tittle,
+                            title: title,
                             id: id2,
                             link: link
                         }
