@@ -59,7 +59,7 @@ router.post("/singInEmail", async (req, res) => {
                     }).catch(error => {res.status(400).send({error, status: false})})
                 }).catch(error => {res.status(400).send({error, status: false})})
             }).catch(error => {res.status(400).send({error, status: false})})
-        }).catch(error => {res.status(400).send({error, status: false})})
+        }).catch(error => {res.status(400).send({message: "Wrong email or password", status: false})})
     }else{
         res.status(401).send({message: "Missing data in the body", status: false})
     }
