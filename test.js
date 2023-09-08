@@ -9,7 +9,7 @@ async function test18(){
             name: "nicolas"
         },
         email : "test1117@gmail.com",
-        pass: "te"
+        pass: "test12"
     }
     fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
         method: "POST",
@@ -30,7 +30,7 @@ async function test19(){
             name: "nicolas"
         },
         email : "test1117@gmail.com",
-        uid: "123dasd3"
+        uid: "123dasasd3"
     }
     fetch("http://3.129.111.250:4242/api/singup/singUpGoogle", {
         method: "POST",
@@ -118,4 +118,4 @@ async function test23(){
     })
 }
 
-test23();
+test19();

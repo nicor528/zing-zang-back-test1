@@ -183,7 +183,6 @@ function getID (uid) {
                     rej(1)
                 }else{
                     res(result.Item.id)
-
                 }
             }).catch(error => {
                 console.log(error)

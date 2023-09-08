@@ -5,7 +5,7 @@
  *   description: SingUp operations
  */
 const express = require('express');
-const { createUser, createID, setNewKey, generateAlphanumericCode, setPat } = require('../apis/apiDynamoDB');
+const { createUser, createID, setNewKey, generateAlphanumericCode, setPat, getID } = require('../apis/apiDynamoDB');
 const router = express.Router();
 const { SingUpEmail1 } = require('../apis/apiAuth');
 const { getRot } = require('../apis/apiSpotify');
@@ -69,24 +69,33 @@ router.post("/singUpGoogle", async (req, res) => {
     const User = req.body.user;
     const email = req.body.email;
     if(uid && User && email){
-        createID(uid).then(id => {
-            createUser(id, User, email, "").then(async (user) => {
-                const key = await generateAlphanumericCode();
-                setNewKey(id, key).then( () => {
-                    getRot(email).then(pat => {
-                        setPat(id, pat).then(async () => {
-                            const data = await {
-                                id: id,
-                                key: key,
-                            }
-                            res.status(200).send(data)
-                        }).catch(error => {res.status(400)})
-                    }).catch(error => {res.status(400)})
-                }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-            }).catch(error => {
-                console.log(error)
-            })
-        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+        getID(uid).then(() => {
+            res.status(401).send({error: "User already exist"})
+        }).catch(error => {
+            if(error == 1){
+                createID(uid).then(id => {
+                    createUser(id, User, email, "").then(async (user) => {
+                        const key = await generateAlphanumericCode();
+                        setNewKey(id, key).then( () => {
+                            getRot(email).then(pat => {
+                                setPat(id, pat).then(async () => {
+                                    const data = await {
+                                        id: id,
+                                        key: key,
+                                    }
+                                    res.status(200).send(data)
+                                }).catch(error => {res.status(400)})
+                            }).catch(error => {res.status(400)})
+                        }).catch(error => {res.status(400).send(error)})
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }).catch(error => {res.status(400).send(error)})
+            }else{
+                res.status(401).send(error)
+            }
+        })
+        
     }else{
         res.status(401).send({error: "Missing data in the body"})
     }
