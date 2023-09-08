@@ -118,4 +118,24 @@ async function test23(){
     })
 }
 
-test23();
+async function test24(){
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+        key: "1oovbp1z5ExvCf3o"
+    }
+    fetch("http://3.129.111.250:4242/api/security/verifyDemo", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+
+
+test24();

@@ -26,7 +26,7 @@ router.post("/verifyRequest", async (req, res) => {
     })
 })
 
-router.post("/verifyDemo", async (res, rej) => {
+router.post("/verifyDemo", async (req, res) => {
     const id = req.body.id;
     const key = req.body.key;
     verifyKey(id, key).then(newKey => {
