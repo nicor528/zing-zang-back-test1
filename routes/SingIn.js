@@ -55,13 +55,13 @@ router.post("/singInEmail", async (req, res) => {
                             user,
                             key
                         }
-                        res.status(200).send(data)
-                    }).catch(error => {res.status(400).send(error)})
-                }).catch(error => {res.status(400).send(error)})
-            }).catch(error => {res.status(400).send(error)})
-        }).catch(error => {res.status(400).send(error)})
+                        res.status(200).send({data, status: true, message: "succefull singIn"})
+                    }).catch(error => {res.status(400).send({error, status: false})})
+                }).catch(error => {res.status(400).send({error, status: false})})
+            }).catch(error => {res.status(400).send({error, status: false})})
+        }).catch(error => {res.status(400).send({error, status: false})})
     }else{
-        res.status(401).send({error: "Missing data in the body"})
+        res.status(401).send({message: "Missing data in the body", status: false})
     }
 })
 
@@ -106,18 +106,18 @@ router.post("/singInWithId", async (req, res) => {
                         user,
                         key
                     }
-                    res.status(200).send(data)
-                }).catch(error => {res.status(400).send(error)})
-            }).catch(error => {res.status(400).send(error)})
+                    res.status(200).send({data, status:true, message: "succesfull singIn"})
+                }).catch(error => {res.status(400).send({error, status:false})})
+            }).catch(error => {res.status(400).send({error, status:false})})
         }).catch(error => {
             if(error == 1){
-                res.status(400).send({error: "No User find"})
+                res.status(400).send({message: "No User find", status: false})
             }else{
-                res.status(400).send(error)
+                res.status(400).send({error, status: false})
             }
         })
     }else{
-        res.status(401).send({error: "missing uid"})
+        res.status(401).send({message: "missing uid", status: false})
     }
 })
 

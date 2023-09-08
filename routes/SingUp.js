@@ -70,7 +70,7 @@ router.post("/singUpGoogle", async (req, res) => {
     const email = req.body.email;
     if(uid && User && email){
         getID(uid).then(() => {
-            res.status(401).send({error: "User already exist"})
+            res.status(401).send({message: "User already exist", status: false})
         }).catch(error => {
             if(error == 1){
                 createID(uid).then(id => {
@@ -83,21 +83,22 @@ router.post("/singUpGoogle", async (req, res) => {
                                         id: id,
                                         key: key,
                                     }
-                                    res.status(200).send(data)
-                                }).catch(error => {res.status(400)})
-                            }).catch(error => {res.status(400)})
-                        }).catch(error => {res.status(400).send(error)})
+                                    res.status(200).send({data, status: true, message: "registration succefull"})
+                                }).catch(error => {res.status(400).send({error, status: false})})
+                            }).catch(error => {res.status(400).send({error, status: false})})
+                        }).catch(error => {res.status(400).send({error, status: false})})
                     }).catch(error => {
                         console.log(error)
+                        res.status(400).send({error, status:false})
                     })
-                }).catch(error => {res.status(400).send(error)})
+                }).catch(error => {res.status(400).send({error, status:false})})
             }else{
-                res.status(401).send(error)
+                res.status(401).send({error, status:false})
             }
         })
         
     }else{
-        res.status(401).send({error: "Missing data in the body"})
+        res.status(401).send({message: "Missing data in the body", status:false})
     }
 
 
@@ -156,25 +157,25 @@ router.post("/singUpEmail", async (req, res) => {
                                     id: id,
                                     key: key,
                                 }
-                                res.status(200).send(data)
-                            }).catch(error => {res.status(400).send(error)})
-                        }).catch(error => {res.status(400).send(error)})
-                    }).catch(error => {res.status(400).send(error)})
+                                res.status(200).send({data, status: true, message: "Success"})
+                            }).catch(error => {res.status(400).send({error, status: false})})
+                        }).catch(error => {res.status(400).send({error, status: false})})
+                    }).catch(error => {res.status(400).send({error, status: false})})
                 }).catch(error => {
                     console.log(error)
                 })
-            }).catch(error => {res.status(400).send({error})})
+            }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(async (error) => {
             if(error == 1){
-                res.status(401).send({error: "email already in use"})
+                res.status(401).send({message: "email already in use", status: false})
             }if(error == 2){
-                res.status(401).send({error: "To short password"})
+                res.status(401).send({message: "To short password", status: false})
             }else{
                 res.status(400).send(error)
             }
         })
     }else{
-        res.status(401).send({error: "Missing data in the body"})
+        res.status(401).send({message: "Missing data in the body", status: false})
     }
 })
 

@@ -103,11 +103,11 @@ router.post("/createTextSong", async (req, res) => {
             createSong(pat, mode, duration, bitrate, text).then(tasks => {
                 addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title).then(data => {
                     res.status(200).send({message: "ok"})
-                }).catch(error => {res.status(400).send(error)})
-            }).catch(error => {res.status(400).send(error)})
-        }).catch(error => {res.status(400).send(error)})
+                }).catch(error => {res.status(400).send({error, status: false})})
+            }).catch(error => {res.status(400).send({error, status: false})})
+        }).catch(error => {res.status(400).send({error, status: false})})
     }else{
-        res.status(401).send({error: "Missing data in the body"})
+        res.status(401).send({message: "Missing data in the body", status: false})
     }
 
 })
@@ -151,9 +151,9 @@ router.post("/requestTextSongs", async (req, res) => {
     if(id){
         getTextSongs(id).then(songs => {
             res.status(200).send(songs.songs)
-        }).catch(error => {res.status(400).send(error)})
+        }).catch(error => {res.status(400).send({error, status: false})})
     }else{
-        res.status(401).send({error: "Missing id in the body"})
+        res.status(401).send({message: "Missing id in the body", status: false})
     }
 })
 
