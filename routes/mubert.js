@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
-const { setPat, getPat, getTextSongs, addNewTextSong } = require('../apis/apiDynamoDB');
+const { setPat, getPat, getTextSongs, addNewTextSong, getUser } = require('../apis/apiDynamoDB');
 const router = express.Router();
 
 /**
@@ -100,9 +100,11 @@ router.post("/createTextSong", async (req, res) => {
     const id = req.body.id;
     if(mode && duration && bitrate && text && title && id){
         getPat(id).then(pat => {
-            createSong(pat, mode, duration, bitrate, text).then(tasks => {
-                addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title).then(data => {
-                    res.status(200).send({message: "ok", status: true})
+            getUser(id).then(user => {
+                createSong(pat, mode, duration, bitrate, text).then(tasks => {
+                    addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title, user.name, duration).then(data => {
+                        res.status(200).send({message: "ok", status: true})
+                    }).catch(error => {res.status(400).send({error, status: false})})
                 }).catch(error => {res.status(400).send({error, status: false})})
             }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})

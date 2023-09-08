@@ -298,7 +298,7 @@ function getTextSongs (id) {
     )
 }
 
-function addNewTextSong (id, id2, link, title) {
+function addNewTextSong (id, id2, link, title, autor, duration) {
     return(
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
@@ -309,12 +309,15 @@ function addNewTextSong (id, id2, link, title) {
             })
             docClient.send(command).then(result => {
                 console.log(result.Item.songs)
+                const newID = result.Item.songs.length + 1
                 const newUser = {
                     songs :  [...result.Item.songs,
                         {
                             title: title,
-                            id: id2,
-                            link: link
+                            id: newID.toString(),
+                            link: link,
+                            artist: autor,
+                            duration: duration
                         }
                     ]
                 }

@@ -85,10 +85,10 @@ async function test22(){
         uid: "123dasd3",
         duration: "120",
         text: "a cool song",
-        tittle: "mi master pice",
+        title: "mi master pice",
         id: "iqag02hi7VRQLwAG"
     }
-    fetch("http://3.129.111.250:4242/api/Spotify/createTextSong", {
+    fetch("http://localhost:4242/api/Spotify/createTextSong", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -105,7 +105,7 @@ async function test23(){
     const data = {
         id: "iqag02hi7VRQLwAG"
     }
-    fetch("http://3.129.111.250:4242/api/Spotify/requestTextSongs", {
+    fetch("http://localhost:4242/api/Spotify/requestTextSongs", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -118,4 +118,4 @@ async function test23(){
     })
 }
 
-test19();
+test23();
