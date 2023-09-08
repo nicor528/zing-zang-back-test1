@@ -46,13 +46,23 @@ const router = express.Router();
 router.post("/singInEmail", async (req, res) => {
     const email = req.body.email;
     const pass = req.body.pass;
-    SingInPass(email, pass).then(user => {
-        getID(user.uid).then(id => {
-            getUser(id).then(user => {
-                res.status(200).send(user)
-            }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-    }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+    if(email && pass){
+        SingInPass(email, pass).then(user => {
+            getID(user.uid).then(id => {
+                getKey(id).then(key => {
+                    getUser(id).then(async (user) => {
+                        const data = await {
+                            user,
+                            key
+                        }
+                        res.status(200).send(data)
+                    }).catch(error => {res.status(400).send(error)})
+                }).catch(error => {res.status(400).send(error)})
+            }).catch(error => {res.status(400).send(error)})
+        }).catch(error => {res.status(400).send(error)})
+    }else{
+        res.status(401).send({error: "Missing data in the body"})
+    }
 })
 
 /**
@@ -88,17 +98,27 @@ router.post("/singInEmail", async (req, res) => {
  */
 router.post("/singInWithId", async (req, res) => {
     const uid = req.body.uid;
-    getID(uid).then(id => {
-        getKey(id).then(key => {
-            getUser(id).then(async (user) => {
-                const data = await {
-                    user,
-                    key
-                }
-                res.status(200).send(data)
-            }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-    }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+    if(uid){
+        getID(uid).then(id => {
+            getKey(id).then(key => {
+                getUser(id).then(async (user) => {
+                    const data = await {
+                        user,
+                        key
+                    }
+                    res.status(200).send(data)
+                }).catch(error => {res.status(400).send(error)})
+            }).catch(error => {res.status(400).send(error)})
+        }).catch(error => {
+            if(error == 1){
+                res.status(400).send({error: "No User find"})
+            }else{
+                res.status(400).send(error)
+            }
+        })
+    }else{
+        res.status(401).send({error: "missing uid"})
+    }
 })
 
 

@@ -98,13 +98,18 @@ router.post("/createTextSong", async (req, res) => {
     const text = req.body.text;
     const tittle = req.body.tittle;
     const id = req.body.id;
-    getPat(id).then(pat => {
-        createSong(pat, mode, duration, bitrate, text).then(tasks => {
-            addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, tittle).then(data => {
-                res.status(200).send("ok")
-            }).catch(error => {res.status(400)})
-        }).catch(error => {res.status(400)})
-    }).catch(error => {res.status(400)})
+    if(mode && duration && bitrate && text && tittle && id){
+        getPat(id).then(pat => {
+            createSong(pat, mode, duration, bitrate, text).then(tasks => {
+                addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, tittle).then(data => {
+                    res.status(200).send({message: "ok"})
+                }).catch(error => {res.status(400).send(error)})
+            }).catch(error => {res.status(400).send(error)})
+        }).catch(error => {res.status(400).send(error)})
+    }else{
+        res.status(401).send({error: "Missing data in the body"})
+    }
+
 })
 
 /**
@@ -143,9 +148,13 @@ router.post("/createTextSong", async (req, res) => {
 */
 router.post("/requestTextSongs", async (req, res) => {
     const id = req.body.id;
-    getTextSongs(id).then(songs => {
-        res.status(200).send(songs)
-    }).catch(error => {res.status(400)})
+    if(id){
+        getTextSongs(id).then(songs => {
+            res.status(200).send(songs.songs)
+        }).catch(error => {res.status(400).send(error)})
+    }else{
+        res.status(401).send({error: "Missing id in the body"})
+    }
 })
 
 

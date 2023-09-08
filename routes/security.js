@@ -1,3 +1,9 @@
+/**
+ * @swagger
+ * tags:
+ *   name: security
+ *   description: security operations
+ */
 const express = require('express');
 const { verifyKey, setNewKey } = require('../apis/apiDynamoDB');
 const router = express.Router();

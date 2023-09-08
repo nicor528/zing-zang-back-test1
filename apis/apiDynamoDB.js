@@ -179,7 +179,12 @@ function getID (uid) {
                 }
             })
             docClient.send(command).then(result => {
-                res(result.Item.id)
+                if(result.Item === undefined){
+                    rej(1)
+                }else{
+                    res(result.Item.id)
+
+                }
             }).catch(error => {
                 console.log(error)
                 rej(error)

@@ -68,25 +68,29 @@ router.post("/singUpGoogle", async (req, res) => {
     const uid = req.body.uid;
     const User = req.body.user;
     const email = req.body.email;
-
-    createID(uid).then(id => {
-        createUser(id, User, email, "").then(async (user) => {
-            const key = await generateAlphanumericCode();
-            setNewKey(id, key).then( () => {
-                getRot(email).then(pat => {
-                    setPat(id, pat).then(async () => {
-                        const data = await {
-                            id: id,
-                            key: key,
-                        }
-                        res.status(200).send(data)
+    if(uid && User && email){
+        createID(uid).then(id => {
+            createUser(id, User, email, "").then(async (user) => {
+                const key = await generateAlphanumericCode();
+                setNewKey(id, key).then( () => {
+                    getRot(email).then(pat => {
+                        setPat(id, pat).then(async () => {
+                            const data = await {
+                                id: id,
+                                key: key,
+                            }
+                            res.status(200).send(data)
+                        }).catch(error => {res.status(400)})
                     }).catch(error => {res.status(400)})
-                }).catch(error => {res.status(400)})
-            }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
-        }).catch(error => {
-            console.log(error)
-        })
-    }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+                }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+            }).catch(error => {
+                console.log(error)
+            })
+        }).catch(error => {res.status(400).send({error : "bad conection with DB"})})
+    }else{
+        res.status(401).send({error: "Missing data in the body"})
+    }
+
 
 })
 
@@ -131,26 +135,38 @@ router.post("/singUpEmail", async (req, res) => {
     //const uid = req.body.uid;
     const email = req.body.email;
     const pass = req.body.pass;
-    SingUpEmail1(email, pass).then(user1 => {
-        createID(user1.uid).then(id => {
-            createUser(id, User, email, pass).then(async (user) => {
-                const key = await generateAlphanumericCode();
-                setNewKey(id, key).then(() => {
-                    getRot(email).then(pat => {
-                        setPat(id, pat).then(async () => {
-                            const data = await {
-                                id: id,
-                                key: key,
-                            }
-                            res.status(200).send(data)
-                        }).catch(error => {res.status(400).send({error})})
-                    }).catch(error => {res.status(400).send({error})})
-                }).catch(error => {res.status(400).send({error})})
-            }).catch(error => {
-                console.log(error)
-            })
-        }).catch(error => {res.status(400).send({error})})
-    }).catch(error => {res.status(400).send({error})})
+    if(User && email && pass){
+        SingUpEmail1(email, pass).then(user1 => {
+            createID(user1.uid).then(id => {
+                createUser(id, User, email, pass).then(async (user) => {
+                    const key = await generateAlphanumericCode();
+                    setNewKey(id, key).then(() => {
+                        getRot(email).then(pat => {
+                            setPat(id, pat).then(async () => {
+                                const data = await {
+                                    id: id,
+                                    key: key,
+                                }
+                                res.status(200).send(data)
+                            }).catch(error => {res.status(400).send(error)})
+                        }).catch(error => {res.status(400).send(error)})
+                    }).catch(error => {res.status(400).send(error)})
+                }).catch(error => {
+                    console.log(error)
+                })
+            }).catch(error => {res.status(400).send({error})})
+        }).catch(async (error) => {
+            if(error == 1){
+                res.status(401).send({error: "email already in use"})
+            }if(error == 2){
+                res.status(401).send({error: "To short password"})
+            }else{
+                res.status(400).send(error)
+            }
+        })
+    }else{
+        res.status(401).send({error: "Missing data in the body"})
+    }
 })
 
 router.post("/singUpFace")

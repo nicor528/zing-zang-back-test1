@@ -57,7 +57,14 @@ function SingUpEmail1 (email, pass) {
                 res(user)
             }).catch(error => {
                 console.log(error)
-                rej(error)
+                console.log(error.code)
+                if(error.code == "auth/email-already-in-use"){
+                    rej(1)
+                }if(error.code == "auth/weak-password"){
+                    rej(2)
+                }else{
+                    rej(error)
+                }
             })
         })
     )
