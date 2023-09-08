@@ -102,7 +102,7 @@ router.post("/createTextSong", async (req, res) => {
         getPat(id).then(pat => {
             createSong(pat, mode, duration, bitrate, text).then(tasks => {
                 addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title).then(data => {
-                    res.status(200).send({message: "ok"})
+                    res.status(200).send({message: "ok", status: true})
                 }).catch(error => {res.status(400).send({error, status: false})})
             }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
