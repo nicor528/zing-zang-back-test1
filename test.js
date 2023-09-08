@@ -11,7 +11,7 @@ async function test18(){
         email : "test1117@gmail.com",
         pass: "te"
     }
-    fetch("http://localhost:4242/api/singup/singUpEmail", {
+    fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -32,7 +32,7 @@ async function test19(){
         email : "test1117@gmail.com",
         uid: "123dasd3"
     }
-    fetch("http://localhost:4242/api/singup/singUpGoogle", {
+    fetch("http://3.129.111.250:4242/api/singup/singUpGoogle", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -50,7 +50,7 @@ async function test20(){
         email : "test1116@gmail.com",
         pass: "test12"
     }
-    fetch("http://localhost:4242/api/singin/singInEmail", {
+    fetch("http://3.129.111.250:4242/api/singin/singInEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -67,7 +67,7 @@ async function test21(){
     const data = {
         uid: "123dasd3"
     }
-    fetch("http://localhost:4242/api/singin/singInWithId", {
+    fetch("http://3.129.111.250:4242/api/singin/singInWithId", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -88,7 +88,7 @@ async function test22(){
         tittle: "mi master pice",
         id: "iqag02hi7VRQLwAG"
     }
-    fetch("http://localhost:4242/api/Spotify/createTextSong", {
+    fetch("http://3.129.111.250:4242/api/Spotify/createTextSong", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -105,7 +105,7 @@ async function test23(){
     const data = {
         id: "iqag02hi7VRQLwAG"
     }
-    fetch("http://localhost:4242/api/Spotify/requestTextSongs", {
+    fetch("http://3.129.111.250:4242/api/Spotify/requestTextSongs", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
