@@ -107,8 +107,10 @@ router.post("/addVideo", async (req, res) => {
  *                   type: string
  */
 router.get("/requestAllVideos", async (req, res) => {
-    getAllVideos().then(result => {
-        res.status(200).send({data: result, status: true})
+    getAllVideos().then(async (result) => {
+        console.log(result)
+        const videos = await result.flatMap(item => item.videos.L);
+        res.status(200).send({data: videos, status: true})
     }).catch(error => {
         res.status(400).send({status: false, message: "fail to conect with DB"})
     })

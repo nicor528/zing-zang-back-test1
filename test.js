@@ -143,7 +143,8 @@ async function testGetAllVideos () {
             "Content-Type" : "application/json"
             },
     }).then(async (data) => {
-        console.log(await data.json())
+        const videos = await data.json()
+        console.log(videos)
     }).catch(error => {
         console.log(error)
     })
@@ -151,10 +152,10 @@ async function testGetAllVideos () {
 
 async function addVideo () {
     const data = {
-        id: "4",
-        link: "example2.com"
+        id: "MjrK0Yx7O2UlkLqU",
+        link: "example22.com"
     }
-    fetch("http://localhost:4242/api/tiktok/addVideo", {
+    fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -173,7 +174,7 @@ async function likeVideo() {
         videoID: "GyVFDYVL8uFy0fqi",
         ownerID: "4"
     }
-    fetch("http://localhost:4242/api/tiktok/likevideo", {
+    fetch("http://3.129.111.250:4242/api/tiktok/likevideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -193,7 +194,7 @@ async function saveVideo () {
         ownerID: "4",
         link: "example.com"
     }
-    fetch("http://localhost:4242/api/tiktok/saveVideo", {
+    fetch("http://3.129.111.250:4242/api/tiktok/saveVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -210,7 +211,7 @@ async function getSavedVideos () {
     const data = {
         id: "MjrK0Yx7O2UlkLqU",
     }
-    fetch("http://localhost:4242/api/tiktok/requestSavedVideos", {
+    fetch("http://3.129.111.250:4242/api/tiktok/requestSavedVideos", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -220,8 +221,8 @@ async function getSavedVideos () {
         console.log(await data.json())
     }).catch(error => {
         console.log(error)
-    }) 
+    })
 }
 
 
-getSavedVideos();
+testGetAllVideos();
