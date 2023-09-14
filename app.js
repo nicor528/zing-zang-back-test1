@@ -28,6 +28,7 @@ const options = {
         './routes/payments.js',
         './routes/security.js',
         "./routes/mubert.js",
+        "./routes/tiktok.js"
     ],
 };
 
@@ -51,6 +52,7 @@ app.use('/api/edits', require('./routes/edits'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/security', require('./routes/security'));
 app.use("/api/Spotify", require("./routes/mubert.js"));
+app.use("/api/tiktok", require("./routes/tiktok.js"));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,4 +1,4 @@
-const { DynamoDBClient, CreateTableCommand, UpdateItemCommand, GetItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, CreateTableCommand, UpdateItemCommand, GetItemCommand, ScanCommand } = require('@aws-sdk/client-dynamodb');
 const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 const { fromEnv } = require('@aws-sdk/credential-provider-env');
 const dotenv = require('dotenv');
@@ -219,19 +219,37 @@ function createUser (id, user, email, pass) {
             docClient.send(command).then(response => {
                 console.log(response)
                 const command = new PutCommand({
-                    TableName: "test",
+                    TableName: "videos",
                     Item: {
                         id: id,
-                        name: user.name,
-                        email: email,
-                        pass: pass,
-                        subscription: false,
-                        IAtrained: false,
+                        videos: []
                     }
                 })
                 docClient.send(command).then(response => {
                     console.log(response)
-                    res(response)
+                    const command = new PutCommand({
+                        TableName: "test",
+                        Item: {
+                            id: id,
+                            name: user.name,
+                            email: email,
+                            pass: pass,
+                            subscription: false,
+                            IAtrained: false,
+                        }
+                    })
+                    docClient.send(command).then(response => {
+                        console.log(response)
+                        const command = new PutCommand({
+                            TableName: "savedVideos",
+                            id: id,
+                            videos: []
+                        })
+                        docClient-send(command).then(response => {
+                            console.log(response)
+                            res(response)
+                        }).catch(error => {console.log(error), rej(error)})
+                    }).catch(error => {console.log(error), rej(error)})
                 }).catch(error => {console.log(error), rej(error)})
             }).catch(error => {console.log(error), rej(error)})
         })
@@ -298,7 +316,7 @@ function getTextSongs (id) {
     )
 }
 
-function addNewTextSong (id, id2, link, title, autor, duration) {
+function addNewTextSong (id, id2, link, title, autor, duration, cover) {
     return(
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
@@ -317,7 +335,8 @@ function addNewTextSong (id, id2, link, title, autor, duration) {
                             id: newID.toString(),
                             link: link,
                             artist: autor,
-                            duration: duration
+                            duration: duration,
+                            albumCover: cover
                         }
                     ]
                 }
@@ -399,6 +418,190 @@ async function addDataToObject(id, id2, tittle, link2) {
     
 }
 
+function getAllVideos () {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new ScanCommand({TableName: "videos"})
+            docClient.send(command).then(result => {
+                res(result.Items)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function getUserVideos (id) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "videos",
+                key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function addVideo (id, videoID, link) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "videos",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                console.log(result.Item.videos)
+                const newID = result.Item.videos.length + 1
+                const newUser = {
+                    videos :  [...result.Item.videos,
+                        {
+                            id: newID.toString(),
+                            link: link,
+                            videoID: videoID,
+                            likes: [],
+                            ownerID: id
+                        }
+                    ]
+                }
+                const command = new PutCommand({
+                    TableName: "videos",
+                    Item: {
+                        id: id,
+                        ...newUser
+                    }
+                })
+                docClient.send(command).then(result => {
+                    console.log(result)
+                    res(result)
+                }).catch(error => {
+                    console.log(error);
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function likeVideo (ownerID, videoID, id) {
+    return(
+        new Promise (async (res, rej) => {
+            console.log(ownerID)
+            const command = new GetCommand({
+                TableName: "videos",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then(result => {
+                console.log(result.Item.videos)
+                let newUser = result.Item
+                const videoIndex = newUser.videos.findIndex((video) => video.videoID === videoID);
+                if (videoIndex !== -1) {
+                    // Suma un nuevo ID al arreglo likes del video encontrado
+                    const newLikeID = id;
+                    newUser.videos[videoIndex].likes.push(newLikeID);
+                    const command = new PutCommand({
+                        TableName: "videos",
+                        Item: {
+                            id: ownerID,
+                            ...newUser
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    }).catch(error => {
+                        console.log(error)
+                        rej(error)
+                    })
+                } else {
+                    rej("Video not found")
+                    console.log('Video no encontrado'); // Maneja el caso en que el video no se encuentra
+                }
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function getSavedVideos (id){
+    return(
+        new Promise (async (res, rej) => {
+            const command = new GetCommand({
+                TableName: "savedVideos",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item)
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function saveVideo (id, videoID, link, ownerID) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = new GetCommand({
+                TableName: "savedVideos",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                console.log(result.Item.videos)
+                const newID = result.Item.videos.length + 1
+                const newUser = {
+                    videos :  [...result.Item.videos,
+                        {
+                            id: newID.toString(),
+                            link: link,
+                            videoID: videoID,
+                            ownerID: ownerID
+                        }
+                    ]
+                }
+                const command = new PutCommand({
+                    TableName: "savedVideos",
+                    Item: {
+                        id: id,
+                        ...newUser
+                    }
+                })
+                docClient.send(command).then(result => {
+                    console.log(result)
+                    res(result)
+                }).catch(error => {
+                    console.log(error);
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
 function editInfoUser (user) {
 
 }
@@ -434,8 +637,9 @@ function createTable () {
             }).catch(error => {console.log(error), rej(error)})
         })
     )
-
 }
+
+
 
 module.exports = {
     createUser,
@@ -453,6 +657,12 @@ module.exports = {
     getPat,
     addNewTextSong,
     addDataToObject,
-    getTextSongs
+    getTextSongs,
+    getAllVideos,
+    addVideo,
+    getUserVideos,
+    saveVideo,
+    likeVideo,
+    getSavedVideos
 
 }

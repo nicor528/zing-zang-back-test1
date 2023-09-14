@@ -136,6 +136,92 @@ async function test24(){
     })
 }
 
+async function testGetAllVideos () {
+    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
+        method: "GET",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function addVideo () {
+    const data = {
+        id: "4",
+        link: "example2.com"
+    }
+    fetch("http://localhost:4242/api/tiktok/addVideo", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function likeVideo() {
+    const data = {
+        id: "5",
+        videoID: "GyVFDYVL8uFy0fqi",
+        ownerID: "4"
+    }
+    fetch("http://localhost:4242/api/tiktok/likevideo", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function saveVideo () {
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+        videoID: "GyVFDYVL8uFy0fqi",
+        ownerID: "4",
+        link: "example.com"
+    }
+    fetch("http://localhost:4242/api/tiktok/saveVideo", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    }) 
+}
+
+async function getSavedVideos () {
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+    }
+    fetch("http://localhost:4242/api/tiktok/requestSavedVideos", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    }) 
+}
 
 
-test24();
+getSavedVideos();

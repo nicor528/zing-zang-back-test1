@@ -98,11 +98,12 @@ router.post("/createTextSong", async (req, res) => {
     const text = req.body.text;
     const title = req.body.title;
     const id = req.body.id;
+    const albumCover = "https://upload.wikimedia.org/wikipedia/en/3/3e/Basshunter_%E2%80%93_Boten_Anna.jpg";
     if(mode && duration && bitrate && text && title && id){
         getPat(id).then(pat => {
             getUser(id).then(user => {
                 createSong(pat, mode, duration, bitrate, text).then(tasks => {
-                    addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title, user.name, duration).then(data => {
+                    addNewTextSong(id, tasks[0].task_id, tasks[0].download_link, title, user.name, duration, albumCover).then(data => {
                         res.status(200).send({message: "ok", status: true})
                     }).catch(error => {res.status(400).send({error, status: false})})
                 }).catch(error => {res.status(400).send({error, status: false})})
@@ -152,15 +153,20 @@ router.post("/requestTextSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
         getTextSongs(id).then(songs => {
-            res.status(200).send(songs.songs)
+            res.status(200).send({data: songs.songs, status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
         res.status(401).send({message: "Missing id in the body", status: false})
     }
 })
 
+router.post("/likeSong", async (req, res) => {
+    
+})
 
+router.post("/getAllLikedSongs", async (req, res) => {
 
+})
 
 
 
