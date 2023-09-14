@@ -153,7 +153,10 @@ async function testGetAllVideos () {
 async function addVideo () {
     const data = {
         id: "MjrK0Yx7O2UlkLqU",
-        link: "example222.com"
+        link: "example222.com",
+        description: "",
+        title: "",
+        postProfile, ""
     }
     fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
