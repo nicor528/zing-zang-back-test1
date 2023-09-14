@@ -10,7 +10,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /addVideo:
+ * /api/tiktok/addVideo:
  *   post:
  *     summary: Add a new video.
  *     tags: [tiktok]
@@ -80,7 +80,7 @@ router.post("/addVideo", async (req, res) => {
 
 /**
  * @swagger
- * /requestAllVideos:
+ * /api/tiktok/requestAllVideos:
  *   get:
  *     summary: Get all videos.
  *     tags: [tiktok]
@@ -122,7 +122,7 @@ router.get("/requestAllVideos", async (req, res) => {
 
 /**
  * @swagger
- * /likeVideo:
+ * /api/tiktok/likeVideo:
  *   post:
  *     summary: Like a video.
  *     tags: [tiktok]
@@ -190,7 +190,7 @@ router.post("/likeVideo", async (req, res) => {
 
 /**
  * @swagger
- * /requestUserVideos:
+ * /api/tiktok/requestUserVideos:
  *   post:
  *     summary: Get videos of a user.
  *     tags: [tiktok]
@@ -250,7 +250,7 @@ router.post("/requestUserVideos", async (req, res) => {
 
 /**
  * @swagger
- * /saveVideo:
+ * /api/tiktok/saveVideo:
  *   post:
  *     summary: Save a video.
  *     tags: [tiktok]
@@ -321,7 +321,7 @@ router.post("/saveVideo", async (req, res) => {
 
 /**
  * @swagger
- * /requestSavedVideos:
+ * /api/tiktok/requestSavedVideos:
  *   post:
  *     summary: Get saved videos of a user.
  *     tags: [tiktok]

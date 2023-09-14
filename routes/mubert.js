@@ -160,6 +160,41 @@ router.post("/requestTextSongs", async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/spotify/likeSong:
+ *   post:
+ *     summary: Like a song
+ *     tags: [Spotify]
+ *     requestBody:
+ *       description: User ID, Owner ID, and Song Link
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               link:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Song liked successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Song liked successfully
+ *               status: true
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request
+ */
 router.post("/likeSong", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
@@ -173,6 +208,41 @@ router.post("/likeSong", async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/spotify/getAllLikedSongs:
+ *   post:
+ *     summary: Get all liked songs for a user
+ *     tags: [Spotify]
+ *     requestBody:
+ *       description: User ID
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Liked songs retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               data:
+ *                 - title: Liked Song 1
+ *                   link: Link to Liked Song 1
+ *                 - title: Liked Song 2
+ *                   link: Link to Liked Song 2
+ *               status: true
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request
+ */
 router.post("/getAllLikedSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
