@@ -156,8 +156,9 @@ async function addVideo () {
         link: "example222.com",
         description: "",
         title: "",
-        postProfile, ""
+        postProfile: ""
     }
+    
     fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
