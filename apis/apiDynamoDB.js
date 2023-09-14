@@ -336,7 +336,9 @@ function addNewTextSong (id, id2, link, title, autor, duration, cover) {
                             link: link,
                             artist: autor,
                             duration: duration,
-                            albumCover: cover
+                            albumCover: cover,
+                            likes: [],
+                            ownerID: id
                         }
                     ]
                 }
@@ -491,6 +493,82 @@ function addVideo (id, videoID, link, description, postProfile, title) {
                     console.log(error);
                     rej(error)
                 })
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function likeTextSong (id, ownerID, link) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = new GetCommand({
+                TableName: "textSongs",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then((result) => {
+                let newUser = result.Item
+                const songIndex = newUser.songs.findIndex((song) => song.link === link);
+                if (songIndex !== -1) {
+                    // Suma un nuevo ID al arreglo likes del video encontrado
+                    const newLikeID = id;
+                    newUser.songs[songIndex].likes.push(newLikeID);
+                    const command = new PutCommand({
+                        TableName: "textSongs",
+                        Item: {
+                            id: ownerID,
+                            ...newUser
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    }).catch(error => {
+                        console.log(error)
+                        rej(error)
+                    })
+                } else {
+                    rej("Video not found")
+                    console.log('Video no encontrado'); // Maneja el caso en que el video no se encuentra
+                }
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
+function getLikedSongs (id) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new ScanCommand({TableName: "textSongs"})
+            docClient.send(command).then(async (result) => {
+                const allSongs = result.Items;
+                const songs = await allSongs.flatMap(item => item.songs.L);
+                console.log(songs)
+                const cancionesConLikesEspecificos = songs.reduce((result, objeto) => {
+                    if (objeto.M && objeto.M.likes && objeto.M.likes.L) {
+                      // Si el objeto tiene una propiedad "M", "likes", y "L" que es un array
+                      const likes = objeto.M.likes.L;
+                      const tieneLikeEspecifico = likes.some((like) => {
+                        return like.S === id;
+                      });
+                  
+                      if (tieneLikeEspecifico) {
+                        if (!Array.isArray(result)) {
+                          result = []; // Inicializa result como un array si aún no lo es
+                        }
+                        result.push(objeto); // Agrega el objeto completo al nuevo array
+                      }
+                    }
+                    return result;
+                  }, []);
+                console.log(cancionesConLikesEspecificos)
+                res(cancionesConLikesEspecificos)
             }).catch(error => {
                 console.log(error)
                 rej(error)
@@ -666,6 +744,8 @@ module.exports = {
     getUserVideos,
     saveVideo,
     likeVideo,
-    getSavedVideos
+    getSavedVideos,
+    likeTextSong,
+    getLikedSongs
 
 }

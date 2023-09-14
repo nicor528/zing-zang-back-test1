@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
-const { setPat, getPat, getTextSongs, addNewTextSong, getUser } = require('../apis/apiDynamoDB');
+const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, getLikedSongs } = require('../apis/apiDynamoDB');
 const router = express.Router();
 
 /**
@@ -156,16 +156,32 @@ router.post("/requestTextSongs", async (req, res) => {
             res.status(200).send({data: songs.songs, status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
-        res.status(401).send({message: "Missing id in the body", status: false})
+        res.status(401).send({message: "Missing data in the body", status: false})
     }
 })
 
 router.post("/likeSong", async (req, res) => {
-    
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const link = req.body.link;
+    if(id && ownerID && link) {
+        likeTextSong(id, ownerID, link).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
 })
 
 router.post("/getAllLikedSongs", async (req, res) => {
-
+    const id = req.body.id;
+    if(id){
+        getLikedSongs(id).then(songs => {
+            res.status(200).send({data: songs, status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false}) 
+    }
 })
 
 

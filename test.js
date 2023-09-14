@@ -82,11 +82,10 @@ async function test21(){
 
 async function test22(){
     const data = {
-        uid: "123dasd3",
         duration: "120",
         text: "a cool song",
         title: "mi master pice",
-        id: "iqag02hi7VRQLwAG"
+        id: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://localhost:4242/api/Spotify/createTextSong", {
         method: "POST",
@@ -158,7 +157,7 @@ async function addVideo () {
         title: "",
         postProfile: ""
     }
-    
+
     fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
@@ -228,5 +227,41 @@ async function getSavedVideos () {
     })
 }
 
+async function getLikedSongs () {
+    const data = {
+        id: "iqag02hi7VRQLwAG",
+    }
+    fetch("http://localhost:4242/api/Spotify/getAllLikedSongs", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
 
-likeVideo();
+async function likeSong () {
+    const data = {
+        id: "iqag02hi7VRQLwAG",
+        ownerID: "m56jBT1HlYaOtpn4",
+        link: "https://static-eu.gcp.mubert.com/b2b/recorder/zingzanglab/e17d1c2de3a24affb69004f659295c1a.mp3"
+    }
+    fetch("http://localhost:4242/api/Spotify/likeSong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+
+getLikedSongs();
