@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
-const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, getLikedSongs } = require('../apis/apiDynamoDB');
+const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong } = require('../apis/apiDynamoDB');
 const router = express.Router();
 
 /**
@@ -160,6 +160,19 @@ router.post("/requestTextSongs", async (req, res) => {
     }
 })
 
+
+router.post("/deleteSong", async (req, res) => {
+    const id = req.body.id;
+    const title = req.body.title;
+    if(id && title){
+        deleteSong(id, title).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
 /**
  * @swagger
  * /api/spotify/likeSong:
@@ -208,9 +221,51 @@ router.post("/likeSong", async (req, res) => {
     }
 })
 
+
+router.post("/unLikeSong", async (req, res) => {
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const title = req.body.title;
+    if(id && ownerID && title){
+        unLikeSong(id, ownerID, title).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
+
+router.post("/saveSong", async (req, res) => {
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const title = req.body.title;
+    if(id && ownerID && title) {
+        saveTextSong(id, ownerID, title).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
+router.post("/unSaveSong", async (req, res) => {
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const title = req.body.title;
+    if(id && ownerID && title){
+        unSaveSong(id, ownerID, title).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
+
 /**
  * @swagger
- * /api/spotify/getAllLikedSongs:
+ * /api/spotify/getAllSavedSongs:
  *   post:
  *     summary: Get all liked songs for a user
  *     tags: [Spotify]
@@ -243,10 +298,10 @@ router.post("/likeSong", async (req, res) => {
  *             example:
  *               error: Bad request
  */
-router.post("/getAllLikedSongs", async (req, res) => {
+router.post("/getAllSavedSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
-        getLikedSongs(id).then(songs => {
+        getSavedSongs(id).then(songs => {
             res.status(200).send({data: songs, status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{

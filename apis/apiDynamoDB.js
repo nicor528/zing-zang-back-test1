@@ -316,6 +316,121 @@ function getTextSongs (id) {
     )
 }
 
+function unSaveSong(id, ownerID, title) {
+    return(
+        new Promise(async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "textSongs",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then(result => {
+                const songs = result.Item.songs
+                const songToUpdate = songs.find((song) => song.title === title);
+                if (songToUpdate) {
+                    // Filtra los likes para eliminar el usuario específico
+                    songToUpdate.saves = songToUpdate.saves.filter((userId) => userId !== id);
+                  
+                    // Encuentra el índice de la canción en el array principal
+                    const songIndex = songs.findIndex((song) => song.title === title);
+                  
+                    // Actualiza la canción en el array principal
+                    songs[songIndex] = songToUpdate;
+                    const command = new PutCommand({
+                        TableName: "textSongs",
+                        Item: {
+                            id: ownerID,
+                            songs: songs
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    })
+                } else {
+                    rej({error: "Not song found"})
+                    console.log("No se encontró la canción especificada.");
+                }
+            })
+        })
+    )
+}
+
+function unLikeSong(id, ownerID, title) {
+    return(
+        new Promise(async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "textSongs",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then(result => {
+                const songs = result.Item.songs
+                const songToUpdate = songs.find((song) => song.title === title);
+                if (songToUpdate) {
+                    // Filtra los likes para eliminar el usuario específico
+                    songToUpdate.likes = songToUpdate.likes.filter((userId) => userId !== id);
+                  
+                    // Encuentra el índice de la canción en el array principal
+                    const songIndex = songs.findIndex((song) => song.title === title);
+                  
+                    // Actualiza la canción en el array principal
+                    songs[songIndex] = songToUpdate;
+                    const command = new PutCommand({
+                        TableName: "textSongs",
+                        Item: {
+                            id: ownerID,
+                            songs: songs
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    })
+                } else {
+                    rej({error: "Not song found"})
+                    console.log("No se encontró la canción especificada.");
+                }
+            })
+        })
+    )
+}
+
+function deleteSong (id, title) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "textSongs",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(async (result) => {
+                const SONGS = result.Item.songs;
+                const filteredArray = await SONGS.filter((item) => item.title !== title);
+                console.log(filteredArray);
+                const songs = {songs: [...filteredArray]}
+                const command = new PutCommand({
+                    TableName: "textSongs",
+                    Item: {
+                        id: id,
+                        ...songs
+                    }
+                })
+                docClient.send(command).then(result => {
+                    res(result)
+                }).catch(error => {
+                    console.log(error)
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
 function addNewTextSong (id, id2, link, title, autor, duration, cover) {
     return(
         new Promise (async (res, rej) => {
@@ -338,7 +453,8 @@ function addNewTextSong (id, id2, link, title, autor, duration, cover) {
                             duration: duration,
                             albumCover: cover,
                             likes: [],
-                            ownerID: id
+                            ownerID: id,
+                            saves: []
                         }
                     ]
                 }
@@ -501,6 +617,47 @@ function addVideo (id, videoID, link, description, postProfile, title) {
     )
 }
 
+function saveTextSong (id, ownerID, title) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = new GetCommand({
+                TableName: "textSongs",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then((result) => {
+                let newUser = result.Item
+                const songIndex = newUser.songs.findIndex((song) => song.title === title);
+                if (songIndex !== -1) {
+                    // Suma un nuevo ID al arreglo likes del video encontrado
+                    const newLikeID = id;
+                    newUser.songs[songIndex].saves.push(newLikeID);
+                    const command = new PutCommand({
+                        TableName: "textSongs",
+                        Item: {
+                            id: ownerID,
+                            ...newUser
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    }).catch(error => {
+                        console.log(error)
+                        rej(error)
+                    })
+                } else {
+                    rej("Video not found")
+                    console.log('Video no encontrado'); // Maneja el caso en que el video no se encuentra
+                }
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
 function likeTextSong (id, ownerID, link) {
     return(
         new Promise (async (res, rej) => {
@@ -542,7 +699,7 @@ function likeTextSong (id, ownerID, link) {
     )
 }
 
-function getLikedSongs (id) {
+function getSavedSongs (id) {
     return(
         new Promise (async (res, rej) => {
             const command = await new ScanCommand({TableName: "textSongs"})
@@ -551,11 +708,11 @@ function getLikedSongs (id) {
                 const songs = await allSongs.flatMap(item => item.songs.L);
                 console.log(songs)
                 const cancionesConLikesEspecificos = songs.reduce((result, objeto) => {
-                    if (objeto.M && objeto.M.likes && objeto.M.likes.L) {
+                    if (objeto.M && objeto.M.saves && objeto.M.saves.L) {
                       // Si el objeto tiene una propiedad "M", "likes", y "L" que es un array
-                      const likes = objeto.M.likes.L;
-                      const tieneLikeEspecifico = likes.some((like) => {
-                        return like.S === id;
+                      const saves = objeto.M.saves.L;
+                      const tieneLikeEspecifico = saves.some((save) => {
+                        return save.S === id;
                       });
                   
                       if (tieneLikeEspecifico) {
@@ -746,6 +903,10 @@ module.exports = {
     likeVideo,
     getSavedVideos,
     likeTextSong,
-    getLikedSongs
+    getSavedSongs,
+    deleteSong,
+    saveTextSong,
+    unLikeSong,
+    unSaveSong
 
 }

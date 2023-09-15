@@ -263,5 +263,97 @@ async function likeSong () {
     })
 }
 
+async function deleteSong () {
+    const data = {
+        id: "iqag02hi7VRQLwAG",
+        title: "mi master pice3"
+    }
+    fetch("http://localhost:4242/api/Spotify/deleteSong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
 
-getLikedSongs();
+async function unlike () {
+    const data = {
+        id: "123",
+        title: "NEw SON",
+        ownerID: "iqag02hi7VRQLwAG"
+    }
+    fetch("http://localhost:4242/api/Spotify/unLikeSong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function saveSong () {
+    const data = {
+        id: "123",
+        title: "NEw SON",
+        ownerID: "iqag02hi7VRQLwAG"
+    }
+    fetch("http://localhost:4242/api/Spotify/saveSong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function getAllSavedSongs () {
+    const data = {
+        id: "123"
+    }
+    fetch("http://localhost:4242/api/Spotify/getAllSavedSongs", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+async function unSaveSong () {
+    const data = {
+        id: "123",
+        title: "NEw SON",
+        ownerID: "iqag02hi7VRQLwAG"
+    }
+    fetch("http://localhost:4242/api/Spotify/unSaveSong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+
+unSaveSong();
