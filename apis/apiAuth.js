@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const { getAuth, signInWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require("firebase/auth"); 
+const { getAuth, signInWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } = require("firebase/auth"); 
 const { initializeApp } = require("firebase/app");
 const { GoogleAuthProvider } = require("firebase/auth"); // Asegúrate de importar cualquier otro proveedor que necesites
 
@@ -48,6 +48,19 @@ function SingInPass (email, password) {
     )
 }
 
+function resetPass (email) {
+    return(
+        new Promise (async (res, rej) => {
+            sendPasswordResetEmail(auth, email).then(() => {
+                res()
+            }).catch(error => {
+                console.log(error)
+                rej(error)
+            })
+        })
+    )
+}
+
 function SingUpEmail1 (email, pass) {
     return(
         new Promise (async (res, rej) => {
@@ -75,5 +88,6 @@ module.exports = {
     SingUpGoogle,
     SingUpEmail1,
     SingInPass,
+    resetPass,
 
 }

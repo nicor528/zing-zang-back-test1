@@ -7,7 +7,7 @@
 
 const express = require('express');
 const { createUser, createID, getUser, getID, getKey } = require('../apis/apiDynamoDB');
-const { SingInPass } = require('../apis/apiAuth');
+const { SingInPass, resetPass } = require('../apis/apiAuth');
 const router = express.Router();
 
 /**
@@ -119,6 +119,69 @@ router.post("/singInWithId", async (req, res) => {
     }else{
         res.status(401).send({message: "missing uid", status: false})
     }
+})
+
+/**
+ * @swagger
+ * /api/singin/requestSavedVideos:
+ *   post:
+ *     summary: Reset your password.
+ *     tags: [SingIn]
+ *     requestBody:
+ *       description: User email.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Video added successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '400':
+ *         description: Failed to get saved videos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '401':
+ *         description: Missing data in the request body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ */
+router.post("/resetPass", async (req, res) => {
+    const email = req.body.email;
+    if(email){
+        resetPass(email).then(() => {
+            res.status(200).send({status:true, message: "ok"})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+
 })
 
 
