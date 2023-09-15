@@ -355,5 +355,42 @@ async function unSaveSong () {
     })
 }
 
+async function addIAsong () {
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+        title: "NEw SON",
+        albumCover: "asdasd",
+        link: "asdasd.com"
+    }
+    fetch("http://localhost:4242/api/IAsongs/addIAsong", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
 
-unSaveSong();
+async function getAllSongsUser () {
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+    }
+    fetch("http://localhost:4242/api/Spotify/getAllSongsUser", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        console.log(await data.json())
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+
+getAllSongsUser();

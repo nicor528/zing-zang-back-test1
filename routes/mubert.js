@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
-const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong } = require('../apis/apiDynamoDB');
+const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong, getIASongs } = require('../apis/apiDynamoDB');
 const router = express.Router();
 
 /**
@@ -221,7 +221,41 @@ router.post("/likeSong", async (req, res) => {
     }
 })
 
-
+/**
+ * @swagger
+ * /api/spotify/unLikeSong:
+ *   post:
+ *     summary: Unlike a song
+ *     tags: [Spotify]
+ *     requestBody:
+ *       description: User ID, Owner ID, and Song Title
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Song unliked successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Song unliked successfully
+ *               status: true
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request
+ */
 router.post("/unLikeSong", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
@@ -235,7 +269,41 @@ router.post("/unLikeSong", async (req, res) => {
     }
 })
 
-
+/**
+ * @swagger
+ * /api/spotify/saveSong:
+ *   post:
+ *     summary: Save a song
+ *     tags: [Spotify]
+ *     requestBody:
+ *       description: User ID, Owner ID, and Song Title
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Song saved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Song saved successfully
+ *               status: true
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request
+ */
 router.post("/saveSong", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
@@ -249,6 +317,41 @@ router.post("/saveSong", async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/spotify/unSaveSong:
+ *   post:
+ *     summary: Unsave a song
+ *     tags: [Spotify]
+ *     requestBody:
+ *       description: User ID, Owner ID, and Song Title
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Song unsaved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Song unsaved successfully
+ *               status: true
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Bad request
+ */
 router.post("/unSaveSong", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
@@ -303,6 +406,55 @@ router.post("/getAllSavedSongs", async (req, res) => {
     if(id){
         getSavedSongs(id).then(songs => {
             res.status(200).send({data: songs, status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false}) 
+    }
+})
+
+/**
+ * @swagger
+* /api/spotify/getAllSongsUser:
+*   post:
+*     summary: Request text songs associated with a user
+*     tags: [Spotify]
+*     requestBody:
+*       description: User ID
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               id:
+*                 type: string
+*     responses:
+*       200:
+*         description: Text songs retrieved successfully
+*         content:
+*           application/json:
+*             example:
+*               songs:
+*                 - title: Song 1
+*                   lyrics: Lyrics for Song 1
+*                 - title: Song 2
+*                   lyrics: Lyrics for Song 2
+*       400:
+*         description: Bad request
+*         content:
+*           application/json:
+*             example:
+*               error: Bad request
+*/
+router.post("/getAllSongsUser", async (req, res) => {
+    const id = req.body.id;
+    if(id){
+        getTextSongs(id).then(songs => {
+            const Songs = songs.songs;
+            getIASongs(id).then(result => {
+                const allSongs = [...result, ...Songs]
+                res.status(200).send({data: allSongs, status: true})
+            }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
         res.status(401).send({message: "Missing data in the body", status: false}) 

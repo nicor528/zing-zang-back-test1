@@ -247,7 +247,15 @@ function createUser (id, user, email, pass) {
                         })
                         docClient-send(command).then(response => {
                             console.log(response)
-                            res(response)
+                            const command = new PutCommand({
+                                TableName: "IAsongs",
+                                id: id,
+                                songs: []
+                            })
+                            docClient.send(command).then(response => {
+                                console.log(response)
+                                res(response)
+                            }).catch(error => {console.log(error), rej(error)})
                         }).catch(error => {console.log(error), rej(error)})
                     }).catch(error => {console.log(error), rej(error)})
                 }).catch(error => {console.log(error), rej(error)})
@@ -396,6 +404,73 @@ function unLikeSong(id, ownerID, title) {
     )
 }
 
+function getIASongs(id) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "IAsongs",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item.songs)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function addIAsong (id, title, albumCover, link){
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "IAsongs",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                console.log(result.Item.songs)
+                const newID = result.Item.songs.length + 1
+                const newUser = {
+                    songs :  [...result.Item.songs,
+                        {
+                            title: title,
+                            id: newID.toString(),
+                            link: link,
+                            albumCover: albumCover,
+                            likes: [],
+                            ownerID: id,
+                            saves: [],
+                            type: "IA"
+                        }
+                    ]
+                }
+                const command = new PutCommand({
+                    TableName: "IAsongs",
+                    Item: {
+                        id: id,
+                        ...newUser
+                    }
+                })
+                docClient.send(command).then(result => {
+                    console.log(result)
+                    res(result)
+                }).catch(error => {
+                    console.log(error);
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
 function deleteSong (id, title) {
     return(
         new Promise (async (res, rej) => {
@@ -454,7 +529,8 @@ function addNewTextSong (id, id2, link, title, autor, duration, cover) {
                             albumCover: cover,
                             likes: [],
                             ownerID: id,
-                            saves: []
+                            saves: [],
+                            type: "textSong"
                         }
                     ]
                 }
@@ -907,6 +983,8 @@ module.exports = {
     deleteSong,
     saveTextSong,
     unLikeSong,
-    unSaveSong
+    unSaveSong,
+    addIAsong,
+    getIASongs
 
 }
