@@ -8,10 +8,10 @@ async function test18(){
         user : {
             name: "nicolas"
         },
-        email : "test1117@gmail.com",
+        email : "test11112@gmail.com",
         pass: "test12"
     }
-    fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
+    fetch("http://localhost:4242/api/singup/singUpEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -84,7 +84,7 @@ async function test22(){
     const data = {
         duration: "120",
         text: "a cool song",
-        title: "mi master pice",
+        title: "mi master pice2",
         id: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://localhost:4242/api/Spotify/createTextSong", {
@@ -392,5 +392,19 @@ async function getAllSongsUser () {
     })
 }
 
+async function createPat () {
+    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
+        method: "GET",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+    }).then(async (data) => {
+        const videos = await data.json();
+        console.log(videos.data[0])
+    }).catch(error => {
+        console.log(error)
+    })
+}
 
-getAllSongsUser();
+
+test18();

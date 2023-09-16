@@ -7,6 +7,7 @@
 const express = require('express');
 const { getRot, createSong } = require('../apis/apiSpotify');
 const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong, getIASongs } = require('../apis/apiDynamoDB');
+const { actualizarEnlaces } = require('../apis/apiS3');
 const router = express.Router();
 
 /**
@@ -46,7 +47,7 @@ router.post("/createPat", async (req, res) => {
     const id = req.body.id;
     getRot(email).then(pat => {
         setPat(id, pat).then(() => {
-            res.status(200).send("ok")
+            res.status(200).send({message: "ok"})
         }).catch(error => {res.status(400)})
     }).catch(error => {res.status(400)})
 })
@@ -405,7 +406,10 @@ router.post("/getAllSavedSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
         getSavedSongs(id).then(songs => {
-            res.status(200).send({data: songs, status: true})
+            actualizarEnlaces(songs).then(songs => {
+                console.log(songs)
+                res.status(200).send({data: songs, status: true})
+            }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
         res.status(401).send({message: "Missing data in the body", status: false}) 

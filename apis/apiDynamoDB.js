@@ -245,7 +245,7 @@ function createUser (id, user, email, pass) {
                             id: id,
                             videos: []
                         })
-                        docClient-send(command).then(response => {
+                        docClient.send(command).then(response => {
                             console.log(response)
                             const command = new PutCommand({
                                 TableName: "IAsongs",
