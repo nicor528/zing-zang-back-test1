@@ -242,15 +242,19 @@ function createUser (id, user, email, pass) {
                         console.log(response)
                         const command = new PutCommand({
                             TableName: "savedVideos",
-                            id: id,
-                            videos: []
+                            Item: {
+                                id: id,
+                                videos: []
+                            }
                         })
                         docClient.send(command).then(response => {
                             console.log(response)
                             const command = new PutCommand({
                                 TableName: "IAsongs",
-                                id: id,
-                                songs: []
+                                Item: {
+                                    id: id,
+                                    songs: []
+                                }
                             })
                             docClient.send(command).then(response => {
                                 console.log(response)

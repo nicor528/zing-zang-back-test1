@@ -8,7 +8,7 @@ async function test18(){
         user : {
             name: "nicolas"
         },
-        email : "test11112@gmail.com",
+        email : "test11114@gmail.com",
         pass: "test12"
     }
     fetch("http://localhost:4242/api/singup/singUpEmail", {
