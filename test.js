@@ -410,6 +410,24 @@ async function createPat () {
     })
 }
 
-createPat();
+async function test50 () {
+    const data = {
+        path: "outputs/MjrK0Yx7O2UlkLqU/apple.png",
+    }
+    fetch("http://3.129.111.250:4242/api/security/requestDownloadLink", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+        body: await JSON.stringify(data),
+    }).then(async (data) => {
+        const videos = await data.json();
+        console.log(videos.data)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+test50();
 
 //getAllSongsUser();
