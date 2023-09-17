@@ -91,9 +91,15 @@ async function actualizarEnlaces(objetos) {
                 // Verificar si el tipo es "IA" antes de actualizar el enlace
                 if (objeto.M.type.S && objeto.M.type.S === "IA") {
                   const link = objeto.M.link.S;
+                  const link2 = objeto.M.albumCover.S;
                   generarEnlaceDeDescarga(link).then(result => {
                     objeto.M.link.S = result;
-                    return objeto
+                    generarEnlaceDeDescarga(link2).then(result => {
+                      objeto.M.albumCover.S = result;
+                      return objeto
+                    }).catch(error => {
+                      return objeto
+                    })
                   }).catch(error => {
                     return objeto
                   })
