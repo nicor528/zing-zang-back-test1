@@ -1,6 +1,6 @@
 const { SingUpEmail1 } = require("./apis/apiAuth");
 const { createUser, createTable, getUser, createID, getID, getPat, addNewTextSong, addDataToObject, getTextSongs } = require("./apis/apiDynamoDB");
-const { getFiles } = require("./apis/apiS3");
+const { getFiles, test } = require("./apis/apiS3");
 const { getRot, createSong } = require("./apis/apiSpotify");
 
 async function test18(){
@@ -152,13 +152,13 @@ async function testGetAllVideos () {
 async function addVideo () {
     const data = {
         id: "MjrK0Yx7O2UlkLqU",
-        link: "example222.com",
-        description: "",
-        title: "",
-        postProfile: ""
+        link: "outputs/MjrK0Yx7O2UlkLqU/apple.png",
+        description: "asd",
+        title: "asd",
+        postProfile: "asd"
     }
 
-    fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
+    fetch("http://localhost:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -360,7 +360,7 @@ async function addIAsong () {
         id: "MjrK0Yx7O2UlkLqU",
         title: "NEw SON",
         albumCover: "asdasd",
-        link: "asdasd.com"
+        link: "outputs/MjrK0Yx7O2UlkLqU/apple.png"
     }
     fetch("http://localhost:4242/api/IAsongs/addIAsong", {
         method: "POST",
@@ -393,18 +393,23 @@ async function getAllSongsUser () {
 }
 
 async function createPat () {
-    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
-        method: "GET",
+    const data = {
+        id: "MjrK0Yx7O2UlkLqU",
+    }
+    fetch("http://localhost:4242/api/tiktok/requestUserVideos", {
+        method: "POST",
         headers: {
             "Content-Type" : "application/json"
             },
+        body: await JSON.stringify(data),
     }).then(async (data) => {
         const videos = await data.json();
-        console.log(videos.data[0])
+        console.log(videos.data)
     }).catch(error => {
         console.log(error)
     })
 }
 
+createPat();
 
-test18();
+//getAllSongsUser();

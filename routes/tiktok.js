@@ -6,6 +6,7 @@
  */
 const express = require('express');
 const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos } = require('../apis/apiDynamoDB');
+const { actualizarEnlaces, actualizarEnlacesVideos } = require('../apis/apiS3');
 const router = express.Router();
 
 /**
@@ -68,7 +69,6 @@ router.post("/addVideo", async (req, res) => {
     const description = req.body.description;
     const postProfile = req.body.postProfile;
     const title = req.body.title;
-
     if(id && link && description && postProfile && title){
         addVideo(id, videoID, link, description, postProfile, title).then(result => {
             res.status(200).send({message: "ok", status: true})
@@ -114,7 +114,10 @@ router.get("/requestAllVideos", async (req, res) => {
     getAllVideos().then(async (result) => {
         console.log(result)
         const videos = await result.flatMap(item => item.videos.L);
-        res.status(200).send({data: videos, status: true})
+        actualizarEnlacesVideos(videos).then(videos => {
+            console.log(videos)
+            res.status(200).send({data: videos, status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
     }).catch(error => {
         res.status(400).send({status: false, message: "fail to conect with DB"})
     })
@@ -244,7 +247,11 @@ router.post("/likeVideo", async (req, res) => {
 router.post("/requestUserVideos", async (req, res) => {
     const id = req.body.id;
     getUserVideos(id).then(result => {
-        res.status(200).send({data: result.videos, status: true})
+        console.log(result.videos)
+        actualizarEnlacesVideos(result.videos).then(videos => {
+            console.log(videos)
+            res.status(200).send({data: videos, status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
     }).catch(error => {res.status(400).send({error, status: false})})
 })
 
@@ -376,7 +383,10 @@ router.post("/requestSavedVideos", async (req, res) => {
     const id = req.body.id;
     if(id){
         getSavedVideos(id).then(videos => {
-            res.status(200).send({data: videos.videos, status: true})
+            actualizarEnlacesVideos(videos.videos).then(videos => {
+                console.log(videos)
+                res.status(200).send({data: videos, status: true})
+            }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
         res.status(401).send({message: "Missing id in the body", status: false})

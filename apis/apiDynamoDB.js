@@ -318,7 +318,6 @@ function getTextSongs (id) {
                 }
             })
             docClient.send(command).then(result => {
-                console.log(result)
                 res(result.Item)
             }).catch(error => {
                 console.log(error);
@@ -635,7 +634,7 @@ function getUserVideos (id) {
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
                 TableName: "videos",
-                key: {
+                Key: {
                     id: id
                 }
             })

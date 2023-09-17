@@ -407,7 +407,7 @@ router.post("/getAllSavedSongs", async (req, res) => {
     if(id){
         getSavedSongs(id).then(songs => {
             actualizarEnlaces(songs).then(songs => {
-                console.log(songs)
+                console.log(songs[0].link)
                 res.status(200).send({data: songs, status: true})
             }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
@@ -457,7 +457,10 @@ router.post("/getAllSongsUser", async (req, res) => {
             const Songs = songs.songs;
             getIASongs(id).then(result => {
                 const allSongs = [...result, ...Songs]
-                res.status(200).send({data: allSongs, status: true})
+                actualizarEnlaces(allSongs).then(songs => {
+                    console.log(songs)
+                    res.status(200).send({data: songs, status: true})
+                }).catch(error => {res.status(400).send({error, status: false})})
             }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
