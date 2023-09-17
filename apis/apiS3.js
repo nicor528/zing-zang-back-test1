@@ -133,9 +133,10 @@ async function actualizarEnlaces(objetos) {
 async function actualizarEnlacesVideos(objetos) {
     try {
       const newArray = await Promise.all(objetos.map(async (objeto) => {
-        const link = objeto.link;
+        console.log(objeto)
+        const link = objeto.M.link.S;
         const enlaceDeDescarga = await generarEnlaceDeDescarga(link);
-        objeto.link = enlaceDeDescarga;
+        objeto.M.link.S = enlaceDeDescarga;
         return objeto;
       }));
       
@@ -157,11 +158,11 @@ async function test (){
 
 
 module.exports = {
-    getFiles,
-    actualizarEnlaces,
-    test,
-    actualizarEnlacesVideos,
-    generarEnlaceDeDescarga
+  getFiles,
+  actualizarEnlaces,
+  test,
+  actualizarEnlacesVideos,
+  generarEnlaceDeDescarga
 
 
 }

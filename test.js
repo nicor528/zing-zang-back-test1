@@ -428,6 +428,21 @@ async function test50 () {
     })
 }
 
-test50();
+async function test51 () {
+
+    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
+        method: "GET",
+        headers: {
+            "Content-Type" : "application/json"
+            },
+    }).then(async (data) => {
+        const videos = await data.json();
+        console.log(videos.data[0].M.link)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+test51();
 
 //getAllSongsUser();
