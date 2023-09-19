@@ -8,10 +8,10 @@ async function test18(){
         user : {
             name: "nicolas"
         },
-        email : "test11114@gmail.com",
+        email : "lukas@thernloven.com",
         pass: "test12"
     }
-    fetch("http://localhost:4242/api/singup/singUpEmail", {
+    fetch("http://3.129.111.250:4242/api/singup/singUpEmail", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -47,7 +47,7 @@ async function test19(){
 
 async function test20(){
     const data = {
-        email : "test1116@gmail.com",
+        email : "test11115@gmail.com",
         pass: "test12"
     }
     fetch("http://3.129.111.250:4242/api/singin/singInEmail", {
@@ -84,7 +84,7 @@ async function test22(){
     const data = {
         duration: "120",
         text: "a cool song",
-        title: "mi master pice2",
+        title: "mi master pice22",
         id: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://localhost:4242/api/Spotify/createTextSong", {
@@ -158,7 +158,7 @@ async function addVideo () {
         postProfile: "asd"
     }
 
-    fetch("http://localhost:4242/api/tiktok/addVideo", {
+    fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -412,7 +412,7 @@ async function createPat () {
 
 async function test50 () {
     const data = {
-        path: "outputs/MjrK0Yx7O2UlkLqU/apple.png",
+        path: "outputs/MjrK0Yx7O2UlkLqU/videoMjrK0Yx7O2UlkLqU.mp4",
     }
     fetch("http://3.129.111.250:4242/api/security/requestDownloadLink", {
         method: "POST",
@@ -430,7 +430,7 @@ async function test50 () {
 
 async function test51 () {
 
-    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
+    fetch("http://3.129.111.250:4242/api/tiktok/requestAllVideos", {
         method: "GET",
         headers: {
             "Content-Type" : "application/json"
@@ -443,6 +443,6 @@ async function test51 () {
     })
 }
 
-test51();
+test51()
 
 //getAllSongsUser();

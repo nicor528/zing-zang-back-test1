@@ -648,7 +648,7 @@ function getUserVideos (id) {
     )
 }
 
-function addVideo (id, videoID, link, description, postProfile, title) {
+function addVideo (id, videoID, link, description, postProfile, title, song) {
     return(
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
@@ -670,7 +670,9 @@ function addVideo (id, videoID, link, description, postProfile, title) {
                             ownerID: id,
                             postProfile: postProfile,
                             description: description,
-                            title: title
+                            title: title,
+                            saves: [],
+                            song: song
                         }
                     ]
                 }
