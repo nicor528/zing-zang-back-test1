@@ -330,9 +330,8 @@ router.post("/saveVideo", async (req, res) => {
     const id = req.body.id;
     const videoID = req.body.videoID;
     const ownerID = req.body.ownerID;
-    const link = req.body.link;
-    if(id && videoID && link && ownerID){
-        saveVideo(id, videoID, link, ownerID).then(result => {
+    if(id && videoID && ownerID){
+        saveVideo(id, videoID, ownerID).then(result => {
             res.status(200).send({message: "ok", status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{

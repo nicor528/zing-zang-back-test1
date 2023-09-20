@@ -933,7 +933,7 @@ function getSavedVideos (id){
     )
 }
 
-function saveVideo (id, videoID, link, ownerID) {
+function saveVideo (id, videoID, ownerID) {
     return(
         new Promise (async (res, rej) => {
             const command = new GetCommand({
