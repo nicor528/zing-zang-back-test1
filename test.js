@@ -159,7 +159,7 @@ async function addVideo () {
         postProfile: "asd",
         path: "textSongs/MjrK0Yx7O2UlkLqU/mi master pice223.mp3"
     }
-    fetch("http://localhost:4242/api/tiktok/addVideo", {
+    fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"

@@ -69,7 +69,7 @@ router.post("/addVideo", async (req, res) => {
     const description = req.body.description;
     const postProfile = req.body.postProfile;
     const title = req.body.title;
-    const path = req.body.song;
+    const path = req.body.path;
     if(id && link && description && postProfile && title && path){
         addVideo(id, videoID, link, description, postProfile, title, path).then(result => {
             res.status(200).send({message: "ok", status: true})
