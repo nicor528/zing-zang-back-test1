@@ -728,8 +728,8 @@ function saveTextSong (id, ownerID, title) {
                         rej(error)
                     })
                 } else {
-                    rej("Video not found")
-                    console.log('Video no encontrado'); // Maneja el caso en que el video no se encuentra
+                    rej("song not found")
+                    console.log('song no encontrado'); // Maneja el caso en que el video no se encuentra
                 }
             }).catch(error => {
                 console.log(error)
@@ -861,18 +861,34 @@ function likeVideo (ownerID, videoID, id) {
 function getSavedVideos (id){
     return(
         new Promise (async (res, rej) => {
-            const command = new GetCommand({
-                TableName: "savedVideos",
-                Key: {
-                    id: id
-                }
-            })
-            docClient.send(command).then(result => {
-                res(result.Item)
+            const command = await new ScanCommand({TableName: "videos"})
+            docClient.send(command).then(async (result) => {
+                const allVideos = result.Items;
+                const videos = await allVideos.flatMap(item => item.videos.L);
+                console.log(videos)
+                const videosConSavesEspecificos = videos.reduce((result, objeto) => {
+                    if (objeto.M && objeto.M.saves && objeto.M.saves.L) {
+                      // Si el objeto tiene una propiedad "M", "likes", y "L" que es un array
+                      const saves = objeto.M.saves.L;
+                      const tieneLikeEspecifico = saves.some((save) => {
+                        return save.S === id;
+                      });
+                      if (tieneLikeEspecifico) {
+                        if (!Array.isArray(result)) {
+                          result = []; // Inicializa result como un array si aún no lo es
+                        }
+                        result.push(objeto); // Agrega el objeto completo al nuevo array
+                      }
+                    }
+                    return result;
+                  }, []);
+                console.log(videosConSavesEspecificos)
+                res(videosConSavesEspecificos)
             }).catch(error => {
                 console.log(error)
                 rej(error)
             })
+
         })
     )
 }
@@ -881,38 +897,36 @@ function saveVideo (id, videoID, link, ownerID) {
     return(
         new Promise (async (res, rej) => {
             const command = new GetCommand({
-                TableName: "savedVideos",
+                TableName: "videos",
                 Key: {
-                    id: id
+                    id: ownerID
                 }
             })
             docClient.send(command).then(result => {
                 console.log(result.Item.videos)
-                const newID = result.Item.videos.length + 1
-                const newUser = {
-                    videos :  [...result.Item.videos,
-                        {
-                            id: newID.toString(),
-                            link: link,
-                            videoID: videoID,
-                            ownerID: ownerID
+                let newUser = result.Item;
+                const songIndex = newUser.songs.findIndex((song) => song.videoID === videoID);
+                if (songIndex !== -1) {
+                    // Suma un nuevo ID al arreglo likes del video encontrado
+                    const newLikeID = id;
+                    newUser.videos[songIndex].saves.push(newLikeID);
+                    const command = new PutCommand({
+                        TableName: "videos",
+                        Item: {
+                            id: ownerID,
+                            ...newUser
                         }
-                    ]
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    }).catch(error => {
+                        console.log(error)
+                        rej(error)
+                    })
+                } else {
+                    rej("Video not found")
+                    console.log('Video no encontrado'); // Maneja el caso en que el video no se encuentra
                 }
-                const command = new PutCommand({
-                    TableName: "savedVideos",
-                    Item: {
-                        id: id,
-                        ...newUser
-                    }
-                })
-                docClient.send(command).then(result => {
-                    console.log(result)
-                    res(result)
-                }).catch(error => {
-                    console.log(error);
-                    rej(error)
-                })
             }).catch(error => {
                 console.log(error)
                 rej(error)
