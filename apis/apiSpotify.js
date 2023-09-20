@@ -57,6 +57,7 @@ function createSong (pat, mode, duration, bitrate, text) {
                 })
             }).then(async (data) => {
                 const x = await data.json()
+                console.log(x)
                 console.log(x.data.tasks);
                 res(x.data.tasks)
             }).catch(error => {

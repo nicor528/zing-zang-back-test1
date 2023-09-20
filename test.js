@@ -84,7 +84,7 @@ async function test22(){
     const data = {
         duration: "120",
         text: "a cool song",
-        title: "mi master pice22",
+        title: "mi master pice223",
         id: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://localhost:4242/api/Spotify/createTextSong", {
@@ -94,6 +94,7 @@ async function test22(){
             },
         body: await JSON.stringify(data),
     }).then(async (data) => {
+        console.log(data.status)
         console.log(await data.json())
     }).catch(error => {
         console.log(error)
@@ -155,10 +156,10 @@ async function addVideo () {
         link: "outputs/MjrK0Yx7O2UlkLqU/apple.png",
         description: "asd",
         title: "asd",
-        postProfile: "asd"
+        postProfile: "asd",
+        path: "textSongs/MjrK0Yx7O2UlkLqU/mi master pice223.mp3"
     }
-
-    fetch("http://3.129.111.250:4242/api/tiktok/addVideo", {
+    fetch("http://localhost:4242/api/tiktok/addVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -430,14 +431,14 @@ async function test50 () {
 
 async function test51 () {
 
-    fetch("http://3.129.111.250:4242/api/tiktok/requestAllVideos", {
+    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
         method: "GET",
         headers: {
             "Content-Type" : "application/json"
             },
     }).then(async (data) => {
         const videos = await data.json();
-        console.log(videos.data[0].M.link)
+        console.log(videos.data[0].M)
     }).catch(error => {
         console.log(error)
     })

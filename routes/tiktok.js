@@ -69,9 +69,9 @@ router.post("/addVideo", async (req, res) => {
     const description = req.body.description;
     const postProfile = req.body.postProfile;
     const title = req.body.title;
-    const song = req.body.song;
-    if(id && link && description && postProfile && title && song){
-        addVideo(id, videoID, link, description, postProfile, title, song).then(result => {
+    const path = req.body.song;
+    if(id && link && description && postProfile && title && path){
+        addVideo(id, videoID, link, description, postProfile, title, path).then(result => {
             res.status(200).send({message: "ok", status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{

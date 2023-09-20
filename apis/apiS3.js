@@ -1,10 +1,12 @@
 const { fromIni } = require("@aws-sdk/credential-provider-ini");
-const { S3Client, ListBucketsCommand, ListObjectsCommand, ListObjectsV2Command, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, ListBucketsCommand, ListObjectsCommand, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { S3RequestPresigner, getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { Hash } = require("@aws-sdk/hash-node");
 const { parseUrl } = require("@aws-sdk/url-parser");
 const { HttpRequest } = require("@aws-sdk/protocol-http");
 const { formatUrl } = require("@aws-sdk/util-format-url");
+const { default: fetch } = require("node-fetch");
+const { response } = require("express");
 
 
 const s3Client = new S3Client({
@@ -137,6 +139,9 @@ async function actualizarEnlacesVideos(objetos) {
         const link = objeto.M.link.S;
         const enlaceDeDescarga = await generarEnlaceDeDescarga(link);
         objeto.M.link.S = enlaceDeDescarga;
+        const linkSong = objeto.M.song.S;
+        const enlaceSong = await generarEnlaceDeDescarga(linkSong);
+        objeto.M.song.S = enlaceSong;
         return objeto;
       }));
       
@@ -151,8 +156,67 @@ async function actualizarEnlacesVideos(objetos) {
 
 
 async function test (){
+
     const linkDeDescarga = await generarEnlaceDeDescarga("outputs/MjrK0Yx7O2UlkLqU/apple.png");
     console.log(linkDeDescarga)
+}
+
+async function saveInS3 (id, nombreArchivo, link) {
+  return(
+    new Promise (async (res, rej) => {
+      descargarArchivoConFetch(link).then(file => {
+        console.log(file)
+        const params = {
+          Bucket: "zing-zang-vc",
+          Key: "textSongs/" + id + "/" + nombreArchivo + ".mp3",
+          Body: file,
+        };
+        s3Client.send(new PutObjectCommand(params)).then(result => {
+          console.log(result)
+          const path = "textSongs/" + id + "/" + nombreArchivo + ".mp3"
+          res(path)
+        }).catch(error => {
+          console.log(error + "test");
+          rej(error)
+        })
+      }).catch(() => {
+        rej()
+      })
+    })
+  )
+}
+
+async function descargarArchivoConFetch(enlace) {
+  return(
+    new Promise(async (res, rej) => {
+      await fetch("https://static-eu.gcp.mubert.com/b2b/recorder/zingzanglab/dd1ded6730bd4f37894d0723735f9b27.mp3").then(async (response) => {
+        console.log(response)
+        if(!response.ok){
+          console.log(response.statusText)
+          rej()
+        }else{
+          const archivoDescargado = await response.buffer();
+          res (archivoDescargado);
+        }
+      })
+    })
+  )
+  try {
+    // Realiza la solicitud HTTP GET para descargar el archivo
+    const response = await fetch(enlace);
+
+    if (!response.ok) {
+      throw new Error(`Error al descargar el archivo: ${response.statusText}`);
+    }
+
+    // Lee el contenido de la respuesta como un Buffer
+    const archivoDescargado = await response.buffer();
+
+    return archivoDescargado;
+  } catch (error) {
+    console.error(`Error al descargar el archivo:`, error);
+    throw error;
+  }
 }
 
 
@@ -162,7 +226,7 @@ module.exports = {
   actualizarEnlaces,
   test,
   actualizarEnlacesVideos,
-  generarEnlaceDeDescarga
-
+  generarEnlaceDeDescarga,
+  saveInS3
 
 }
