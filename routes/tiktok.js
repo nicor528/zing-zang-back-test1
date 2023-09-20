@@ -5,7 +5,7 @@
  *   description: tiktok operations
  */
 const express = require('express');
-const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos, unLikeVideo } = require('../apis/apiDynamoDB');
+const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos, unLikeVideo, unSaveVideo } = require('../apis/apiDynamoDB');
 const { actualizarEnlaces, actualizarEnlacesVideos } = require('../apis/apiS3');
 const router = express.Router();
 
@@ -387,6 +387,76 @@ router.post("/saveVideo", async (req, res) => {
     const ownerID = req.body.ownerID;
     if(id && videoID && ownerID){
         saveVideo(id, videoID, ownerID).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
+/**
+ * @swagger
+ * /api/tiktok/saveVideo:
+ *   post:
+ *     summary: Save a video.
+ *     tags: [tiktok]
+ *     requestBody:
+ *       description: Video data to be saved.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               videoID:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               link:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Video saved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '400':
+ *         description: Failed to save video.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '401':
+ *         description: Missing data in the request body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ */
+router.post("/unSaveVideo", async (req, res) => {
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const videoID = req.body.videoID;
+    if(id && ownerID && videoID){
+        unSaveVideo(id, ownerID, videoID).then(result => {
             res.status(200).send({message: "ok", status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{

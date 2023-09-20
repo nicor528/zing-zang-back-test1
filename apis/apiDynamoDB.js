@@ -837,7 +837,7 @@ function unLikeVideo(id, ownerID, videoID) {
                     // Actualiza la canción en el array principal
                     videos[songIndex] = videoToUpdate;
                     const command = new PutCommand({
-                        TableName: "textSongs",
+                        TableName: "videos",
                         Item: {
                             id: ownerID,
                             videos: videos
@@ -929,6 +929,46 @@ function getSavedVideos (id){
                 rej(error)
             })
 
+        })
+    )
+}
+
+function unSaveVideo(id, ownerID, videoID) {
+    return(
+        new Promise(async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "videos",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then(result => {
+                const videos = result.Item.videos
+                const videoToUpdate = videos.find((video) => video.videoID === videoID);
+                if (videoToUpdate) {
+                    // Filtra los likes para eliminar el usuario específico
+                    videoToUpdate.saves = videoToUpdate.saves.filter((userId) => userId !== id);
+                  
+                    // Encuentra el índice de la canción en el array principal
+                    const videoIndex = videos.findIndex((video) => video.videoID === videoID);
+                  
+                    // Actualiza la canción en el array principal
+                    videos[videoIndex] = songToUpdate;
+                    const command = new PutCommand({
+                        TableName: "videos",
+                        Item: {
+                            id: ownerID,
+                            videos: videos
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    })
+                } else {
+                    rej({error: "Not song found"})
+                    console.log("No se encontró la canción especificada.");
+                }
+            })
         })
     )
 }
@@ -1045,6 +1085,7 @@ module.exports = {
     unSaveSong,
     addIAsong,
     getIASongs,
-    unLikeVideo
+    unLikeVideo,
+    unSaveVideo
 
 }
