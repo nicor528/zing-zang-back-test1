@@ -5,7 +5,7 @@
  *   description: tiktok operations
  */
 const express = require('express');
-const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos } = require('../apis/apiDynamoDB');
+const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos, unLikeVideo } = require('../apis/apiDynamoDB');
 const { actualizarEnlaces, actualizarEnlacesVideos } = require('../apis/apiS3');
 const router = express.Router();
 
@@ -185,6 +185,19 @@ router.post("/likeVideo", async (req, res) => {
     const videoID = req.body.videoID;
     if(id && ownerID && videoID){
         likeVideo(ownerID, videoID, id).then(result => {
+            res.status(200).send({message: "ok", status: true})
+        }).catch(error => {res.status(400).send({error, status: false})})
+    }else{
+        res.status(401).send({message: "Missing data in the body", status: false})
+    }
+})
+
+router.post("/unLikeVideo", async (req, res) => {
+    const id = req.body.id;
+    const ownerID = req.body.ownerID;
+    const videoID = req.body.videoID;
+    if(id && ownerID && videoID){
+        unLikeVideo(id, ownerID, videoID).then(result => {
             res.status(200).send({message: "ok", status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{

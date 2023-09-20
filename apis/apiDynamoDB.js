@@ -815,6 +815,46 @@ function getSavedSongs (id) {
     )
 }
 
+function unLikeVideo(id, ownerID, videoID) {
+    return(
+        new Promise(async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "videos",
+                Key: {
+                    id: ownerID
+                }
+            })
+            docClient.send(command).then(result => {
+                const videos = result.Item.videos
+                const videoToUpdate = videos.find((video) => video.videoID === videoID);
+                if (videoToUpdate) {
+                    // Filtra los likes para eliminar el usuario específico
+                    videoToUpdate.likes = videoToUpdate.likes.filter((userId) => userId !== id);
+                  
+                    // Encuentra el índice de la canción en el array principal
+                    const songIndex = videos.findIndex((video) => video.videoID === videoID);
+                  
+                    // Actualiza la canción en el array principal
+                    videos[songIndex] = videoToUpdate;
+                    const command = new PutCommand({
+                        TableName: "textSongs",
+                        Item: {
+                            id: ownerID,
+                            videos: videos
+                        }
+                    })
+                    docClient.send(command).then(result => {
+                        res(result)
+                    })
+                } else {
+                    rej({error: "Not song found"})
+                    console.log("No se encontró la canción especificada.");
+                }
+            })
+        })
+    )
+}
+
 function likeVideo (ownerID, videoID, id) {
     return(
         new Promise (async (res, rej) => {
@@ -1004,6 +1044,7 @@ module.exports = {
     unLikeSong,
     unSaveSong,
     addIAsong,
-    getIASongs
+    getIASongs,
+    unLikeVideo
 
 }

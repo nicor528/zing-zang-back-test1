@@ -174,9 +174,9 @@ async function addVideo () {
 
 async function likeVideo() {
     const data = {
-        id: "ZPoni2FUQ6UQU4XB",
-        videoID: "GyVFDYVL8uFy0fqi",
-        ownerID: "4"
+        id: "4",
+        videoID: "qgR60RhjL1eIFaFE",
+        ownerID: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://3.129.111.250:4242/api/tiktok/likevideo", {
         method: "POST",
@@ -444,6 +444,6 @@ async function test51 () {
     })
 }
 
-addVideo()
+likeVideo()
 
 //getAllSongsUser();
