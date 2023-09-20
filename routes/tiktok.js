@@ -396,7 +396,7 @@ router.post("/saveVideo", async (req, res) => {
 
 /**
  * @swagger
- * /api/tiktok/saveVideo:
+ * /api/tiktok/unSaveVideo:
  *   post:
  *     summary: Save a video.
  *     tags: [tiktok]
