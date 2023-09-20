@@ -985,7 +985,7 @@ function saveVideo (id, videoID, ownerID) {
             docClient.send(command).then(result => {
                 console.log(result.Item.videos)
                 let newUser = result.Item;
-                const songIndex = newUser.songs.findIndex((song) => song.videoID === videoID);
+                const songIndex = newUser.videos.findIndex((video) => video.videoID === videoID);
                 if (songIndex !== -1) {
                     // Suma un nuevo ID al arreglo likes del video encontrado
                     const newLikeID = id;

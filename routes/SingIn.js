@@ -123,7 +123,7 @@ router.post("/singInWithId", async (req, res) => {
 
 /**
  * @swagger
- * /api/singin/requestSavedVideos:
+ * /api/singin/resetPass:
  *   post:
  *     summary: Reset your password.
  *     tags: [SingIn]
@@ -135,7 +135,7 @@ router.post("/singInWithId", async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               email:
  *                 type: string
  *     responses:
  *       '200':
@@ -181,7 +181,6 @@ router.post("/resetPass", async (req, res) => {
     }else{
         res.status(401).send({message: "Missing data in the body", status: false})
     }
-
 })
 
 

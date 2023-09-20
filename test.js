@@ -193,12 +193,11 @@ async function likeVideo() {
 
 async function saveVideo () {
     const data = {
-        id: "MjrK0Yx7O2UlkLqU",
-        videoID: "GyVFDYVL8uFy0fqi",
-        ownerID: "4",
-        link: "example.com"
+        id: "RYVVmRs2G4GgoGY4",
+        videoID: "qgR60RhjL1eIFaFE",
+        ownerID: "MjrK0Yx7O2UlkLqU",
     }
-    fetch("http://3.129.111.250:4242/api/tiktok/saveVideo", {
+    fetch("http://localhost:4242/api/tiktok/saveVideo", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -444,6 +443,6 @@ async function test51 () {
     })
 }
 
-likeVideo()
+saveVideo()
 
 //getAllSongsUser();
