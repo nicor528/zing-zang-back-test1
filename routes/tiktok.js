@@ -192,6 +192,61 @@ router.post("/likeVideo", async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /api/tiktok/unLikeVideo:
+ *   post:
+ *     summary: Like a video.
+ *     tags: [tiktok]
+ *     requestBody:
+ *       description: Like video data.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               ownerID:
+ *                 type: string
+ *               videoID:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Video liked successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '400':
+ *         description: Failed to like video.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ *       '401':
+ *         description: Missing data in the request body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
+ */
 router.post("/unLikeVideo", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
