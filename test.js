@@ -84,7 +84,7 @@ async function test22(){
     const data = {
         duration: "120",
         text: "a cool song",
-        title: "mi master pice223",
+        title: "mi super master 1232",
         id: "MjrK0Yx7O2UlkLqU"
     }
     fetch("http://localhost:4242/api/Spotify/createTextSong", {
@@ -443,6 +443,7 @@ async function test51 () {
     })
 }
 
-saveVideo()
+//saveVideo()
+test22() //text song
 
 //getAllSongsUser();

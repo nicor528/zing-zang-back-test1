@@ -5,7 +5,7 @@
  *   description: Spotify operations
  */
 const express = require('express');
-const { getRot, createSong } = require('../apis/apiSpotify');
+const { getRot, createSong, getSongStatus } = require('../apis/apiSpotify');
 const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong, getIASongs } = require('../apis/apiDynamoDB');
 const { actualizarEnlaces, saveInS3, generarEnlaceDeDescarga } = require('../apis/apiS3');
 const router = express.Router();
@@ -104,13 +104,15 @@ router.post("/createTextSong", async (req, res) => {
         getPat(id).then(pat => {
             getUser(id).then(user => {
                 createSong(pat, mode, duration, bitrate, text).then(tasks => {
-                    saveInS3(id, title, tasks[0].download_link).then(path => {
-                        addNewTextSong(id, tasks[0].task_id, path, title, user.name, duration, albumCover).then(data => {
-                            generarEnlaceDeDescarga(path).then(link => {
-                                res.status(200).send({data: {link: link, path: path}, status: true})
+                    getSongStatus(pat).then(() => {
+                        saveInS3(id, title, tasks[0].download_link).then(path => {
+                            addNewTextSong(id, tasks[0].task_id, path, title, user.name, duration, albumCover).then(data => {
+                                generarEnlaceDeDescarga(path).then(link => {
+                                    res.status(200).send({data: {link: link, path: path}, status: true})
+                                }).catch(error => {res.status(406).send({error, status: false})})
                             }).catch(error => {res.status(406).send({error, status: false})})
-                        }).catch(error => {res.status(406).send({error, status: false})})
-                    }).catch(error => {res.status(405).send({error, status: false})})
+                        }).catch(error => {res.status(405).send({error, status: false})})
+                    }).catch(error => {res.status(408).send({error, status: false})})
                 }).catch(error => {res.status(404).send({error, status: false})})
             }).catch(error => {res.status(403).send({error, status: false})})
         }).catch(error => {res.status(402).send({error, status: false})})

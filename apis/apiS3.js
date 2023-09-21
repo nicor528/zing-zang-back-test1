@@ -185,11 +185,11 @@ async function saveInS3 (id, nombreArchivo, link) {
     })
   )
 }
-
+//https://static-eu.gcp.mubert.com/b2b/recorder/zingzanglab/dd1ded6730bd4f37894d0723735f9b27.mp3
 async function descargarArchivoConFetch(enlace) {
   return(
     new Promise(async (res, rej) => {
-      await fetch("https://static-eu.gcp.mubert.com/b2b/recorder/zingzanglab/dd1ded6730bd4f37894d0723735f9b27.mp3").then(async (response) => {
+      await fetch(enlace).then(async (response) => {
         console.log(response)
         if(!response.ok){
           console.log(response.statusText)
