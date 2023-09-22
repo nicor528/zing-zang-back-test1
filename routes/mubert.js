@@ -159,7 +159,9 @@ router.post("/requestTextSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
         getTextSongs(id).then(songs => {
-            res.status(200).send({data: songs.songs, status: true})
+            actualizarEnlaces(songs.songs).then(songs => {
+                res.status(200).send({data: songs, status: true})
+            }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
     }else{
         res.status(401).send({message: "Missing data in the body", status: false})
