@@ -1,7 +1,7 @@
 const { SingUpEmail1 } = require("./apis/apiAuth");
 const { createUser, createTable, getUser, createID, getID, getPat, addNewTextSong, addDataToObject, getTextSongs } = require("./apis/apiDynamoDB");
 const { getFiles, test } = require("./apis/apiS3");
-const { getRot, createSong } = require("./apis/apiSpotify");
+const { getRot, createSong, getCompanyStatus } = require("./apis/apiSpotify");
 
 async function test18(){
     const data = {
@@ -47,8 +47,8 @@ async function test19(){
 
 async function test20(){
     const data = {
-        email : "test11115@gmail.com",
-        pass: "test12"
+        email : "lukas@thernloven.com",
+        pass: "test@123"
     }
     fetch("http://3.129.111.250:4242/api/singin/singInEmail", {
         method: "POST",
@@ -82,7 +82,7 @@ async function test21(){
 
 async function test22(){
     const data = {
-        duration: "120",
+        duration: "30",
         text: "a cool song",
         title: "mi super master 1232",
         id: "MjrK0Yx7O2UlkLqU"
@@ -412,7 +412,7 @@ async function createPat () {
 
 async function test50 () {
     const data = {
-        path: "outputs/MjrK0Yx7O2UlkLqU/videoMjrK0Yx7O2UlkLqU.mp4",
+        path: "outputs/MjrK0Yx7O2UlkLqU/TicTock_videoMjrK0Yx7O2UlkLqU.mp4",
     }
     fetch("http://3.129.111.250:4242/api/security/requestDownloadLink", {
         method: "POST",
@@ -430,7 +430,7 @@ async function test50 () {
 
 async function test51 () {
 
-    fetch("http://localhost:4242/api/tiktok/requestAllVideos", {
+    fetch("http://3.129.111.250:4242/api/tiktok/requestAllVideos", {
         method: "GET",
         headers: {
             "Content-Type" : "application/json"
@@ -443,7 +443,11 @@ async function test51 () {
     })
 }
 
-//saveVideo()
-test22() //text song
+//getCompanyStatus()
 
+//saveVideo()
+//test22() //text song
+//test50() //request dow link
+test51() // get all videos
+//test20(); 
 //getAllSongsUser();

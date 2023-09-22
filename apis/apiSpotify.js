@@ -4,7 +4,29 @@ const { default: fetch } = require('node-fetch');
 
 dotenv.config();
 
-
+function getCompanyStatus() {
+    return(
+        new Promise (async (res, rej) => {
+            fetch("https://api-b2b.mubert.com/v2/GetCompanyStat", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: await JSON.stringify({
+                    method: "GetCompanyStat",
+                    params: {
+                        license:  process.env.license_spo,
+                        token: process.env.token_spo,
+                    }
+                })
+            }).then(async (result) => {
+                console.log(result)
+                const data = await result.json()
+                console.log(data.data)
+            })
+        })
+    )
+}
 
 function getRot (email) {
     return (
@@ -93,6 +115,7 @@ function getSongStatus (songID) {
                     //console.log(await result.json())
                     const data = await result.json()
                     const tasks = data.data.tasks;
+                    console.log(tasks)
                     allDone = tasks.every(task => task.task_status_code === 2);
                     //console.log(data.data.tasks)
                     console.log("all done" + allDone)
@@ -118,6 +141,7 @@ function getSongStatus (songID) {
 module.exports = {
     getRot,
     createSong,
-    getSongStatus
+    getSongStatus,
+    getCompanyStatus
 
 }

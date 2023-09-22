@@ -671,8 +671,7 @@ function addVideo (id, videoID, link, description, postProfile, title, song) {
                             postProfile: postProfile,
                             description: description,
                             title: title,
-                            saves: [],
-                            song: song
+                            saves: []
                         }
                     ]
                 }

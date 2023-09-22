@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.post("/editInfoUser", async (req, res) => {
     //const key = req.body.key;
-    const user = req.body.user;
+    const id = req.body.id;
+    const name = req.body.name;
+    const email = req.body.email;
     //verifyKey(user.id, key).then(newKey => {
         //setNewKey(user.id, newKey).then(data => {
             editInfoUser(user).then(user => {
@@ -14,9 +16,6 @@ router.post("/editInfoUser", async (req, res) => {
         //}).catch(error => {res.status(400).send({error : "bad conection with DB"})})
     //}).catch(error => {res.status(400).send({error : "bad conection with DB"})})
 })
-
-
-
 
 
 module.exports = router;

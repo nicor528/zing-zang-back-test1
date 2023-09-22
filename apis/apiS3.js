@@ -139,9 +139,6 @@ async function actualizarEnlacesVideos(objetos) {
         const link = objeto.M.link.S;
         const enlaceDeDescarga = await generarEnlaceDeDescarga(link);
         objeto.M.link.S = enlaceDeDescarga;
-        const linkSong = objeto.M.song.S;
-        const enlaceSong = await generarEnlaceDeDescarga(linkSong);
-        objeto.M.song.S = enlaceSong;
         return objeto;
       }));
       
