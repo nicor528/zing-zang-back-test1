@@ -76,7 +76,7 @@ async function generarEnlaceDeDescarga1(link) {
             const url = parseUrl(`https://zing-zang-vc.s3.eu-central-1.amazonaws.com/${objectKey}`);
 
             // Genera el enlace prefirmado
-            presigner.presign(new HttpRequest(url)).then(result => {
+            presigner.presign(new HttpRequest(url)).then(async (result) => {
                 res(formatUrl(result))
             }).catch(error => {
                 console.log(error)
@@ -84,6 +84,20 @@ async function generarEnlaceDeDescarga1(link) {
             })
         })
     )
+}
+
+async function actualizarEnlaces2(objetos) {
+  const newArray = await Promise.all(objetos.map(async (objeto) => {
+    const link = objeto.link;
+    try {
+      const result = await generarEnlaceDeDescarga(link);
+      objeto.link = result;
+    } catch (error) {
+      console.log(error)
+    }
+    return objeto;
+  }));
+  return newArray;
 }
 
 async function actualizarEnlaces(objetos) {
@@ -219,6 +233,7 @@ module.exports = {
   test,
   actualizarEnlacesVideos,
   generarEnlaceDeDescarga,
-  saveInS3
+  saveInS3,
+  actualizarEnlaces2
 
 }

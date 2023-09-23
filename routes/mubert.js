@@ -7,7 +7,7 @@
 const express = require('express');
 const { getRot, createSong, getSongStatus } = require('../apis/apiSpotify');
 const { setPat, getPat, getTextSongs, addNewTextSong, getUser, likeTextSong, deleteSong, saveTextSong, getSavedSongs, unLikeSong, unSaveSong, getIASongs } = require('../apis/apiDynamoDB');
-const { actualizarEnlaces, saveInS3, generarEnlaceDeDescarga } = require('../apis/apiS3');
+const { actualizarEnlaces, saveInS3, generarEnlaceDeDescarga, actualizarEnlaces2 } = require('../apis/apiS3');
 const router = express.Router();
 
 /**
@@ -158,8 +158,9 @@ router.post("/createTextSong", async (req, res) => {
 router.post("/requestTextSongs", async (req, res) => {
     const id = req.body.id;
     if(id){
-        getTextSongs(id).then(songs => {
-            actualizarEnlaces(songs.songs).then(songs => {
+        getTextSongs(id).then(async (songs) => {
+            console.log(songs.songs)
+            actualizarEnlaces2(songs.songs).then(songs => {
                 console.log(songs)
                 res.status(200).send({data: songs, status: true})
             }).catch(error => {res.status(400).send({error, status: false})})

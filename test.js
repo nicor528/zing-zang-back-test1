@@ -87,7 +87,7 @@ async function test22(){
         title: "mi super master 1232",
         id: "MjrK0Yx7O2UlkLqU"
     }
-    fetch("http://localhost:4242/api/Spotify/createTextSong", {
+    fetch("http://3.129.111.250:4242/api/Spotify/createTextSong", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -103,9 +103,9 @@ async function test22(){
 
 async function test23(){
     const data = {
-        id: "RYVVmRs2G4GgoGY4"
+        id: "MjrK0Yx7O2UlkLqU"
     }
-    fetch("http://3.129.111.250:4242/api/Spotify/requestTextSongs", {
+    fetch("http://localhost:4242/api/Spotify/requestTextSongs", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
