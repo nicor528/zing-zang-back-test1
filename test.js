@@ -103,16 +103,17 @@ async function test22(){
 
 async function test23(){
     const data = {
-        id: "iqag02hi7VRQLwAG"
+        id: "RYVVmRs2G4GgoGY4"
     }
-    fetch("http://localhost:4242/api/Spotify/requestTextSongs", {
+    fetch("http://3.129.111.250:4242/api/Spotify/requestTextSongs", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
             },
         body: await JSON.stringify(data),
     }).then(async (data) => {
-        console.log(await data.json())
+        const data2 = await data.json()
+        console.log(data2.data)
     }).catch(error => {
         console.log(error)
     })
@@ -446,6 +447,7 @@ async function test51 () {
 //getCompanyStatus()
 
 //saveVideo()
+test23() // request text songs
 //test22() //text song
 //test50() //request dow link
 test51() // get all videos

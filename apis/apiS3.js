@@ -90,8 +90,6 @@ async function actualizarEnlaces(objetos) {
     return (
         new Promise (async (res, rej) => {
             const newArray = await objetos.map(async (objeto) => {
-                // Verificar si el tipo es "IA" antes de actualizar el enlace
-                if (objeto.M.type.S && objeto.M.type.S === "IA") {
                   const link = objeto.M.link.S;
                   const link2 = objeto.M.albumCover.S;
                   generarEnlaceDeDescarga(link).then(result => {
@@ -105,8 +103,6 @@ async function actualizarEnlaces(objetos) {
                   }).catch(error => {
                     return objeto
                   })
-                }
-                return objeto;
             })
             res(newArray) ;
         })
@@ -149,7 +145,6 @@ async function actualizarEnlacesVideos(objetos) {
       throw error; // Lanzar el error nuevamente si es necesario
     }
   }
-
 
 
 async function test (){

@@ -160,6 +160,7 @@ router.post("/requestTextSongs", async (req, res) => {
     if(id){
         getTextSongs(id).then(songs => {
             actualizarEnlaces(songs.songs).then(songs => {
+                console.log(songs)
                 res.status(200).send({data: songs, status: true})
             }).catch(error => {res.status(400).send({error, status: false})})
         }).catch(error => {res.status(400).send({error, status: false})})
