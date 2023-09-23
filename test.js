@@ -113,7 +113,7 @@ async function test23(){
         body: await JSON.stringify(data),
     }).then(async (data) => {
         const data2 = await data.json()
-        console.log(data2.data)
+        console.log(data2.data[0])
     }).catch(error => {
         console.log(error)
     })
@@ -450,6 +450,6 @@ async function test51 () {
 test23() // request text songs
 //test22() //text song
 //test50() //request dow link
-test51() // get all videos
+//test51() // get all videos
 //test20(); 
 //getAllSongsUser();
