@@ -952,7 +952,7 @@ function unSaveVideo(id, ownerID, videoID) {
                     const videoIndex = videos.findIndex((video) => video.videoID === videoID);
                   
                     // Actualiza la canción en el array principal
-                    videos[videoIndex] = songToUpdate;
+                    videos[videoIndex] = videoToUpdate;
                     const command = new PutCommand({
                         TableName: "videos",
                         Item: {
