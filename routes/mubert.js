@@ -416,6 +416,7 @@ router.post("/getAllSavedSongs", async (req, res) => {
     if(id){
         getSavedSongs(id).then(songs => {
             actualizarEnlaces(songs).then(songs => {
+                console.log(songs)
                 console.log(songs[0].link)
                 res.status(200).send({data: songs, status: true})
             }).catch(error => {res.status(400).send({error, status: false})})

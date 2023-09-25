@@ -791,8 +791,8 @@ function getSavedSongs (id) {
                     if (objeto.M && objeto.M.saves && objeto.M.saves.L) {
                       // Si el objeto tiene una propiedad "M", "likes", y "L" que es un array
                       const saves = objeto.M.saves.L;
-                      const tieneLikeEspecifico = saves.some((save) => {
-                        return save.S === id;
+                      const tieneLikeEspecifico = saves.some((saves) => {
+                        return saves.S === id;
                       });
                   
                       if (tieneLikeEspecifico) {

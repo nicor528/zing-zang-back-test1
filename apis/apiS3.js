@@ -101,26 +101,28 @@ async function actualizarEnlaces2(objetos) {
 }
 
 async function actualizarEnlaces(objetos) {
-    return (
-        new Promise (async (res, rej) => {
-            const newArray = await objetos.map(async (objeto) => {
-                  const link = objeto.M.link.S;
-                  const link2 = objeto.M.albumCover.S;
-                  generarEnlaceDeDescarga(link).then(result => {
-                    objeto.M.link.S = result;
-                    generarEnlaceDeDescarga(link2).then(result => {
-                      objeto.M.albumCover.S = result;
-                      return objeto
-                    }).catch(error => {
-                      return objeto
-                    })
-                  }).catch(error => {
-                    return objeto
-                  })
-            })
-            res(newArray) ;
-        })
-    )
+  const updatedObjects = await Promise.all(
+    objetos.map(async (objeto) => {
+      const tipo = objeto.M.type.S; // Suponiendo que el atributo es "type" y es de tipo String (S)
+      console.log(objeto);
+      // Verificar si el tipo es "IA" antes de actualizar el enlace
+        const link = objeto.M.link.S;
+        try {
+          const result = await generarEnlaceDeDescarga(link);
+          objeto.M.link.S = result;
+          if (tipo === "IA"){
+            const albumCoverLink = objeto.M.albumCover.S;
+            const albumCoverResult = await generarEnlaceDeDescarga(albumCoverLink);
+            objeto.M.albumCover.S = albumCoverResult;
+          }
+        } catch (error) {
+          console.error("Error al generar el enlace de descarga:", error);
+        }
+      return objeto;
+    })
+  );
+
+  return updatedObjects;
 
 
     /*return Promise.all(
