@@ -221,7 +221,7 @@ router.post("/deleteSong", async (req, res) => {
 router.post("/likeSong", async (req, res) => {
     const id = req.body.id;
     const ownerID = req.body.ownerID;
-    const title = req.body.link;
+    const title = req.body.title;
     if(id && ownerID && title) {
         likeTextSong(id, ownerID, title).then(result => {
             res.status(200).send({message: "ok", status: true})
