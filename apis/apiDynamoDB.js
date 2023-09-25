@@ -738,7 +738,7 @@ function saveTextSong (id, ownerID, title) {
     )
 }
 
-function likeTextSong (id, ownerID, link) {
+function likeTextSong (id, ownerID, title) {
     return(
         new Promise (async (res, rej) => {
             const command = new GetCommand({
@@ -749,7 +749,7 @@ function likeTextSong (id, ownerID, link) {
             })
             docClient.send(command).then((result) => {
                 let newUser = result.Item
-                const songIndex = newUser.songs.findIndex((song) => song.link === link);
+                const songIndex = newUser.songs.findIndex((song) => song.title === title);
                 if (songIndex !== -1) {
                     // Suma un nuevo ID al arreglo likes del video encontrado
                     const newLikeID = id;
