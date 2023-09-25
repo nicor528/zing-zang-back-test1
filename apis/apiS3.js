@@ -158,7 +158,25 @@ async function actualizarEnlacesVideos(objetos) {
       console.error("Error al actualizar enlaces:", error);
       throw error; // Lanzar el error nuevamente si es necesario
     }
+}
+
+async function actualizarEnlacesVideos2(objetos) {
+  try {
+    const newArray = await Promise.all(objetos.map(async (objeto) => {
+      console.log(objeto)
+      const link = objeto.link;
+      const enlaceDeDescarga = await generarEnlaceDeDescarga(link);
+      objeto.link = enlaceDeDescarga;
+      return objeto;
+    }));
+    
+    return newArray;
+  } catch (error) {
+    // Manejar errores si es necesario
+    console.error("Error al actualizar enlaces:", error);
+    throw error; // Lanzar el error nuevamente si es necesario
   }
+}
 
 
 async function test (){
@@ -234,6 +252,7 @@ module.exports = {
   actualizarEnlacesVideos,
   generarEnlaceDeDescarga,
   saveInS3,
-  actualizarEnlaces2
+  actualizarEnlaces2,
+  actualizarEnlacesVideos2
 
 }

@@ -6,7 +6,7 @@
  */
 const express = require('express');
 const { getAllVideos, addVideo, getUserVideos, saveVideo, generateAlphanumericCode, likeVideo, getSavedVideos, unLikeVideo, unSaveVideo } = require('../apis/apiDynamoDB');
-const { actualizarEnlaces, actualizarEnlacesVideos } = require('../apis/apiS3');
+const { actualizarEnlaces, actualizarEnlacesVideos, actualizarEnlacesVideos2 } = require('../apis/apiS3');
 const router = express.Router();
 
 /**
@@ -316,7 +316,7 @@ router.post("/requestUserVideos", async (req, res) => {
     const id = req.body.id;
     getUserVideos(id).then(result => {
         console.log(result.videos)
-        actualizarEnlacesVideos(result.videos).then(videos => {
+        actualizarEnlacesVideos2(result.videos).then(videos => {
             console.log(videos)
             res.status(200).send({data: videos, status: true})
         }).catch(error => {res.status(400).send({error, status: false})})
