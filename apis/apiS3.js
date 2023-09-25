@@ -92,6 +92,11 @@ async function actualizarEnlaces2(objetos) {
     try {
       const result = await generarEnlaceDeDescarga(link);
       objeto.link = result;
+      if(objeto.type === "IA"){
+        const albumCoverLink = objeto.albumCover;
+        const albumCoverResult = await generarEnlaceDeDescarga(albumCoverLink);
+        objeto.albumCover = albumCoverResult;
+      }
     } catch (error) {
       console.log(error)
     }

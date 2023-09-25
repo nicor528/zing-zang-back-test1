@@ -464,10 +464,12 @@ router.post("/getAllSongsUser", async (req, res) => {
     const id = req.body.id;
     if(id){
         getTextSongs(id).then(songs => {
+            console.log(songs)
             const Songs = songs.songs;
             getIASongs(id).then(result => {
+                console.log("test2")
                 const allSongs = [...result, ...Songs]
-                actualizarEnlaces(allSongs).then(songs => {
+                actualizarEnlaces2(allSongs).then(songs => {
                     console.log(songs)
                     res.status(200).send({data: songs, status: true})
                 }).catch(error => {res.status(400).send({error, status: false})})
