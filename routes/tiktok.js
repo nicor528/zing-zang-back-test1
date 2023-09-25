@@ -520,7 +520,8 @@ router.post("/requestSavedVideos", async (req, res) => {
     const id = req.body.id;
     if(id){
         getSavedVideos(id).then(videos => {
-            actualizarEnlacesVideos(videos.videos).then(videos => {
+            console.log(videos)
+            actualizarEnlacesVideos(videos).then(videos => {
                 console.log(videos)
                 res.status(200).send({data: videos, status: true})
             }).catch(error => {res.status(400).send({error, status: false})})
