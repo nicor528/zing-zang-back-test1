@@ -257,8 +257,16 @@ function createUser (id, user, email, pass) {
                                 }
                             })
                             docClient.send(command).then(response => {
-                                console.log(response)
-                                res(response)
+                                const command = new PutCommand({
+                                    TableName: "albumCovers",
+                                    Item: {
+                                        id: id,
+                                        albumCovers: []
+                                    }
+                                })
+                                docClient.send(command).then(response => {
+                                    res(response)
+                                }).catch(error => {console.log(error), rej(error)})
                             }).catch(error => {console.log(error), rej(error)})
                         }).catch(error => {console.log(error), rej(error)})
                     }).catch(error => {console.log(error), rej(error)})
@@ -629,6 +637,39 @@ function getAllVideos () {
     )
 }
 
+function getAllAlbumCovers () {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new ScanCommand({TableName: "albumCovers"})
+            docClient.send(command).then(result => {
+                res(result.Items)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function getUserAlbumCovers (id) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "albumCovers",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
 function getUserVideos (id) {
     return(
         new Promise (async (res, rej) => {
@@ -642,6 +683,51 @@ function getUserVideos (id) {
                 res(result.Item)
             }).catch(error => {
                 console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function addAlbumCover(id, albumCoverID, link, title){
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "albumCovers",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                const newID = result.Item.albumCovers.length + 1;
+                const newAlbum = {
+                    albumCovers: [...result.Item.albumCovers,
+                    {
+                        id: newID.toString(),
+                        link: link,
+                        albumCoverID: albumCoverID,
+                        likes: [],
+                        ownerID: id,
+                        title: title,
+                        saves: []
+                    }]
+                }
+                const command = new PutCommand({
+                    TableName: "albumCovers",
+                    Item: {
+                        id: id,
+                        ...newAlbum
+                    }
+                })
+                docClient.send(command).then(result => {
+                    console.log(result)
+                    res(result)
+                }).catch(error => {
+                    console.log(error);
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error)
                 rej(error)
             })
         })
@@ -1085,6 +1171,9 @@ module.exports = {
     addIAsong,
     getIASongs,
     unLikeVideo,
-    unSaveVideo
+    unSaveVideo,
+    addAlbumCover,
+    getAllAlbumCovers,
+    getUserAlbumCovers
 
 }
