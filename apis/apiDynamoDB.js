@@ -265,7 +265,16 @@ function createUser (id, user, email, pass) {
                                     }
                                 })
                                 docClient.send(command).then(response => {
-                                    res(response)
+                                    const command = new PutCommand({
+                                        TableName: "lyrics",
+                                        Item: {
+                                            id: id,
+                                            lyrics: []
+                                        }
+                                    })
+                                    docClient.send(command).then(response => {
+                                        res(response)
+                                    })
                                 }).catch(error => {console.log(error), rej(error)})
                             }).catch(error => {console.log(error), rej(error)})
                         }).catch(error => {console.log(error), rej(error)})
@@ -651,11 +660,45 @@ function getAllAlbumCovers () {
     )
 }
 
+function getLyrics () {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new ScanCommand({TableName: "lyrics"})
+            docClient.send(command).then(result => {
+                console.log(result)
+                res(result.Items)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
 function getUserAlbumCovers (id) {
     return(
         new Promise (async (res, rej) => {
             const command = await new GetCommand({
                 TableName: "albumCovers",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                res(result.Item)
+            }).catch(error => {
+                console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function getUserLyrics (id) {
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "lyrics",
                 Key: {
                     id: id
                 }
@@ -683,6 +726,51 @@ function getUserVideos (id) {
                 res(result.Item)
             }).catch(error => {
                 console.log(error);
+                rej(error)
+            })
+        })
+    )
+}
+
+function addLyrics(id, lyricsID, lyrics, title){
+    return(
+        new Promise (async (res, rej) => {
+            const command = await new GetCommand({
+                TableName: "lyrics",
+                Key: {
+                    id: id
+                }
+            })
+            docClient.send(command).then(result => {
+                const newID = result.Item.lyrics.length + 1;
+                const newLyrics = {
+                    lyrics: [...result.Item.lyrics,
+                    {
+                        id: newID.toString(),
+                        lyrics: lyrics,
+                        lyricsID: lyricsID,
+                        likes: [],
+                        ownerID: id,
+                        title: title,
+                        saves: []
+                    }]
+                }
+                const command = new PutCommand({
+                    TableName: "lyrics",
+                    Item: {
+                        id: id,
+                        ...newLyrics
+                    }
+                })
+                docClient.send(command).then(result => {
+                    console.log(result)
+                    res(result)
+                }).catch(error => {
+                    console.log(error);
+                    rej(error)
+                })
+            }).catch(error => {
+                console.log(error)
                 rej(error)
             })
         })
@@ -1174,6 +1262,9 @@ module.exports = {
     unSaveVideo,
     addAlbumCover,
     getAllAlbumCovers,
-    getUserAlbumCovers
+    getUserAlbumCovers,
+    addLyrics,
+    getLyrics,
+    getUserLyrics
 
 }

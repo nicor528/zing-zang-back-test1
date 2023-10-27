@@ -31,6 +31,7 @@ const options = {
         "./routes/tiktok.js",
         "./routes/IAsongs.js",
         "./routes/albumCover.js",
+        "./routes/lyrics.js",
     ],
 };
 
@@ -57,6 +58,7 @@ app.use("/api/Spotify", require("./routes/mubert.js"));
 app.use("/api/tiktok", require("./routes/tiktok.js"));
 app.use("/api/IAsongs/", require("./routes/IAsongs.js"));
 app.use("/api/albumCover", require("./routes/albumCover.js"));
+app.use("/api/lyrics", require("./routes/lyrics.js"));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
