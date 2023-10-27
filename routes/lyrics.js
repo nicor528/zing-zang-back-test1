@@ -18,9 +18,9 @@ router.post("/addLyrics", async (req, res) => {
 
 router.get("/getAllyrics", async (req, res) => {
     console.log("sadeas")
-    getLyrics(async (result) => {
+    getLyrics().then(async (result) => {
         const lyrics = result.flatMap(item => item.lyrics.L);
-        console.log("test")
+        console.log(lyrics)
         res.status(200).send({data: lyrics, status: true})
     }).catch(error => {res.status(400).send({error, status: false})})
 })
